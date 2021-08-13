@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: .
+    command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && python /arc/manage.py collectstatic --noinput && gunicorn arc.wsgi:application --bind 0.0.0.0:8000"
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/mem:/dev/mem"
+    privileged: true
+    expose:
+      - 8000
+    volumes:
+      - .:/arc
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
+    networks:  # <-- here
+      - web_network
+      - nginx_network
+      - db_network  # <-- connect to the bridge
+    depends_on:
+      - db
+
+  nginx:
+    restart: always
+    build: ./nginx
+    volumes:
+      - .:/arc
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
+    ports:
+      - 1914:80
+    depends_on:
+      - web
+    networks:  # <-- here
+      - nginx_network
+
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER=pi
+      - POSTGRES_PASSWORD=rnautomations
+      - POSTGRES_DB=arc_db
+    networks:  # <-- connect to the bridge
+      - db_network
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
+
+networks:  # <-- and here
+  web_network:
+    driver: bridge
+  nginx_network:
+    driver: bridge
+  db_network:  # <-- add the bridge
+    driver: bridge
+
+volumes:
+    pgdata:
+    static_volume:
+    media_volume:

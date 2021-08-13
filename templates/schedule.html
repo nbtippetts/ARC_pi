@@ -1,0 +1,162 @@
+
+{% extends 'base.html' %}
+{% load schedule_display %}
+{% load humidity_display %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% block content %}
+
+<div id="content-wrapper" class="d-flex flex-column">
+	<div class="content">
+		<div class="container-fluid">
+		<div class="row justify-content-around" style="padding-top: 15px; padding-bottom: 20px;">
+			<div class="col">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Lighting</h6>
+						
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% gpio_14_state_function %}
+						{% current_lighting_schedule %}
+						{% gpio_14_state %}
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Watering</h6>
+			
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% gpio_15_state_function %}
+						{% current_watering_schedule %}
+						{% gpio_15_state %}
+					</div>
+					<!-- Card Body -->
+				</div>
+			</div>
+			<div class="col">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Humidity</h6>
+			
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% gpio_17_state_function %}
+						<div class="h5 mb-0 font-weight-bold text-gray-800">{% show_humidity %}</div>
+						{% gpio_17_state %}
+					</div>
+					<!-- Card Body -->
+				</div>
+			</div>
+			<div class="col">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Exhaust</h6>
+			
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% gpio_18_state_function %}
+						<div class="h5 mb-0 font-weight-bold text-gray-800">{% show_temp %}</div>
+						{% gpio_18_state %}
+					</div>
+					<!-- Card Body -->
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-around">
+			<div class="col-xl-8 col-lg-8">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Schedule</h6>
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						<form action="{% url 'update_schedule' %}" method="POST">
+							{% csrf_token %}
+							{% bootstrap_form form %}
+							{% for error in form.non_field_errors %}
+							<p class="help is-danger">{{ error }}</p>
+							{% endfor %}
+							<button type="submit" class="btn btn-outline-dark btn-sm" value="Submit">Submit</button>
+						</form>
+						<div class="mt-4 text-center small">
+							<span class="mr-2">
+								<i class="fas fa-circle" style="color: #343d46;"></i> Temp/Humidity
+							</span>
+							<span class="mr-2">
+								<i class="fas fa-circle text-success"></i> Lights
+							</span>
+							<span class="mr-2">
+								<i class="fas fa-circle text-info"></i> Water
+							</span>
+							<span class="mr-2">
+								<i class="fas fa-circle text-warning"></i> Exhaust
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-lg-4">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Delete Schedule</h6>
+			
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% remove_schedule %}
+					</div>
+					<!-- Card Body -->
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-around">
+			<div class="col-xl-6 col-lg-6">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+						style="padding-bottom: 0px;">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Lighting Log</h6>
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% show_gpio_14_schedule_log %}
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6">
+				<div class="card shadow mb-4">
+					<!-- Card Header - Dropdown -->
+					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+						style="padding-bottom: 0px;">
+						<h6 class="m-0 font-weight-bold" style="color: #343d46;">Water Logs</h6>
+					</div>
+					<!-- Card Body -->
+					<div class="card-body">
+						{% show_gpio_15_schedule_log %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% block content %}
+    <table class="table table-bordered" style="margin-top: 0px;">
+        <thead>
+            <tr>
+                <th>Start</th>
+                <th>Duration</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in latest_schedule %}
+            <tr>
+                <td style="font-size: 14px;">{{ d.start }}</td>
+                <td style="font-size: 14px;">{{ d.duration }}</td>
+                <td style="font-size: 14px;">{{ d.finish_date }}</td>
+            </tr>
+            {% empty %}
+                <td style="font-size: 14px;">No Date</td>
+                <td style="font-size: 14px;">No Date</td>
+                <td style="font-size: 14px;">No Date</td>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
+	{% csrf_token %}
+	<input type="hidden" name="15" value="15">
+	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
+		<button type="submit" class="btn btn-outline-dark btn-sm" name="status" value="True">ON </button>
+		<button type="submit" class="btn btn-outline-dark btn-sm" name="status" value="False">OFF</button>
+	</div>
+</form>

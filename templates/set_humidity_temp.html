@@ -1,0 +1,14 @@
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load crispy_forms_tags %}
+
+<hr style="border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
+<form action="{% url 'humidity_temperature' %}" method="POST">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	<input type="submit" value="Submit">
+</form>
+<hr style="border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">

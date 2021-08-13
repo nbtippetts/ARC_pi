@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load humidity_display %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div id="content-wrapper" class="d-flex flex-column">
+<div class="content">
+	<div class="container-fluid">
+<div class="row justify-content-center" style="padding-top: 15px; padding-bottom: 20px;">
+	<div class="col">
+		<div class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold" style="color: #343d46;">Lighting</h6>
+
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				{% gpio_14_state_function %}
+				{% current_lighting_schedule %}
+				{% gpio_14_state %}
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold" style="color: #343d46;">Watering</h6>
+	
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				{% gpio_15_state_function %}
+				{% current_watering_schedule %}
+				{% gpio_15_state %}
+			</div>
+			<!-- Card Body -->
+		</div>
+	</div>
+	<div class="col">
+		<div class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold" style="color: #343d46;">Humidity</h6>
+	
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				{% gpio_17_state_function %}
+				<div class="h5 mb-0 font-weight-bold text-gray-800">{% show_humidity %}</div>
+				{% gpio_17_state %}
+			</div>
+			<!-- Card Body -->
+		</div>
+	</div>
+	<div class="col">
+		<div class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold" style="color: #343d46;">Exhaust</h6>
+	
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				{% gpio_18_state_function %}
+				<div class="h5 mb-0 font-weight-bold text-gray-800">{% show_temp %}</div>
+				{% gpio_18_state %}
+			</div>
+			<!-- Card Body -->
+		</div>
+	</div>
+	<!-- Area Chart -->
+	<div class="col-xl-11 col-lg-7 mb-4">
+		<div id="chart_tit" class="card shadow mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-around">
+				<h6 class="m-0 font-weight-bold" style="color: #343d46;">Temperature-Humidity Overview</h6>
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				{% current_hum_temp %}
+			</div>
+			<div id="chart_content" class="card-body" style="padding-top: 0px;">
+				{% humidity_tag %}
+			</div>
+		</div>
+		{% humidity_temp_form %}
+	</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-xl-11 col-lg-11 mb-11">
+			<div class="card shadow mb-4">
+				<!-- Card Header - Dropdown -->
+				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+					style="padding-bottom: 0px;">
+					<h6 class="m-0 font-weight-bold" style="color: #343d46;">Humidity And Temperature Logs</h6>
+				</div>
+				{% log_data %}
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{% endblock %}
