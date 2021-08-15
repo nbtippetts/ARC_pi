@@ -96,8 +96,8 @@ DATABASES = {
         'NAME': 'arc_db',
         'USER': 'pi',
         'PASSWORD': 'rnautomations',
-        # 'HOST': 'db',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        # 'HOST': 'localhost',
         'PORT': 5432,
     }
 }
