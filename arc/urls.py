@@ -46,7 +46,7 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
     path('', views.homepage, name='homepage'),
-    path('humidity/', include('humidity.urls')),
+    path('climate/', include('climate.urls')),
     path('schedule/', include('schedule.urls')),
     path('streamapp/', include('streamapp.urls')),
 ]

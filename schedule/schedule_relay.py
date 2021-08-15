@@ -7,7 +7,7 @@ from pytz import utc
 # import gpiozero
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
-from humidity.models import Exhaust
+from climate.models import Exhaust
 import time
 
 class ScheduleRelay(object):

@@ -4,12 +4,13 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.triggers.combining import OrTrigger
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
-# import gpiozero
+import gpiozero
+import Adafruit_DHT
 from schedule.schedule_relay import ScheduleRelay
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
-from humidity.models import Exhaust, HumidityTempValues, HumidityTemp
-from humidity.models import Exhaust
+from climate.models import Exhaust, ClimateValues, ClimateLogs
+from climate.models import Exhaust
 import time
 
 
@@ -39,11 +40,11 @@ def schedule_relay(*args):
 	start_time = datetime.now()
 	break_loop = args[2]
 	print(relay_status.schedule_status)
+	relay = gpiozero.OutputDevice(int(gpio_pin), active_high=True, initial_value=False)
 	while not break_loop:
 		try:
-			# relay = gpiozero.OutputDevice(int(gpio_pin), active_high=False, initial_value=False)
 			print(f'schedule_relay_job relay {gpio_pin}')
-			# relay.on()
+
 		except Exception as e:
 			pass
 		relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
@@ -66,13 +67,13 @@ def schedule_relay(*args):
 
 def relay_14():
 	try:
-		# relay = gpiozero.OutputDevice(14, active_high=False, initial_value=False)
-		while True:
+		relay = gpiozero.OutputDevice(14, active_high=True, initial_value=False)
+		while relay.active_high:
 			relay_status = RelayStatus.objects.get(pk=1)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
 					print(' button_relay_14 relay ON')
-					# relay.on()
+
 				except Exception as e:
 					print(e)
 					pass
@@ -87,13 +88,14 @@ def relay_14():
 
 def relay_15():
 	try:
-		# relay = gpiozero.OutputDevice(15, active_high=False, initial_value=False)
-		while True:
+		relay = gpiozero.OutputDevice(15, active_high=True, initial_value=False)
+		print(relay.active_high)
+		while relay.active_high:
 			relay_status = RelayStatus.objects.get(pk=2)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
 					print(' button_relay_15 relay ON')
-					# relay.on()
+					print(relay.active_high)
 				except Exception as e:
 					print(e)
 					pass
@@ -108,13 +110,13 @@ def relay_15():
 
 def relay_17():
 	try:
-		# relay = gpiozero.OutputDevice(17, active_high=False, initial_value=False)
-		while True:
+		relay = gpiozero.OutputDevice(17, active_high=True, initial_value=False)
+		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=1)
 			if relay_status.status == 'True':
 				try:
 					print(' button_relay_17 relay ON')
-					# relay.on()
+
 				except Exception as e:
 					print(e)
 					pass
@@ -129,13 +131,13 @@ def relay_17():
 
 def relay_18():
 	try:
-		# relay = gpiozero.OutputDevice(18, active_high=False, initial_value=False)
-		while True:
+		relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
+		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=2)
 			if relay_status.status == 'True':
 				try:
 					print(' button_relay_18 relay ON')
-					# relay.on()
+
 				except Exception as e:
 					print(e)
 					pass
@@ -147,42 +149,24 @@ def relay_18():
 	except Exception as e:
 		print(e)
 		pass
-def humidity_temperature_logs():
-	# sensor = Adafruit_DHT.DHT22
-	pin =4
-	while True:
-		humidity, temperature = 69.0, 69.0
-		# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-		if humidity is not None and temperature is not None:
-			humidity = int(humidity)
-			fahrenheit = (temperature * 9/5) + 32
-			ht_log = HumidityTemp()
-			ht_log.humidity = humidity
-			ht_log.temp = int(fahrenheit)
-			ht_log.save()
-			break
-		else:
-			print('Failed to retrieve data from humidity sensor.')
-			continue
 
-def check_hum_temp():
-	# sensor = Adafruit_DHT.DHT22
+def check_climate():
+	sensor = Adafruit_DHT.DHT22
 	pin =4
-	humidity, temperature = 69.0, 69.0
-	# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 	if humidity is not None and temperature is not None:
 		humidity = int(humidity)
 		fahrenheit = (temperature * 9/5) + 32
 		try:
-			ht_params = HumidityTempValues.objects.get(pk=1)
+			ht_params = ClimateValues.objects.get(pk=1)
 		except Exception as e:
-			ht_params = HumidityTempValues()
+			ht_params = ClimateValues()
 			ht_params.pk=1
 			ht_params.humidity_value=humidity
 			ht_params.buffer_value=5
 			ht_params.temp_value=int(fahrenheit)
 			ht_params.save()
-		ht_params = HumidityTempValues.objects.get(pk=1)
+		ht_params = ClimateValues.objects.get(pk=1)
 		humidity_positive = ht_params.humidity_value+ht_params.buffer_value
 		humidity_nagitive = ht_params.humidity_value-ht_params.buffer_value
 		temp_params = ht_params.temp_value+ht_params.buffer_value
@@ -256,14 +240,32 @@ def check_hum_temp():
 				pass
 
 	else:
-		print('Failed to retrieve data from humidity sensor.')
+		print('Failed to retrieve data from climate sensor.')
+
+def climate_logs():
+	sensor = Adafruit_DHT.DHT22
+	pin =4
+	while True:
+		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+		if humidity is not None and temperature is not None:
+			humidity = int(humidity)
+			fahrenheit = (temperature * 9/5) + 32
+			ht_log = ClimateLogs()
+			ht_log.humidity = humidity
+			ht_log.temp = int(fahrenheit)
+			ht_log.save()
+			break
+		else:
+			print('Failed to retrieve data from climate sensor.')
+			continue
+
 def start():
 	# triggers = CronTrigger(second=5)
 	# triggers_log = CronTrigger(minute=15)
-	# scheduler.add_job(check_hum_temp, triggers, id='humidity_temp_job_id', replace_existing=True)
-	# scheduler.add_job(humidity_temperature_logs, triggers_log, id='humidity_temperature_logs_job_id', replace_existing=True)
-	scheduler.add_job(check_hum_temp, 'interval', seconds=10, id='humidity_temp_job_id', replace_existing=True)
-	scheduler.add_job(humidity_temperature_logs, 'interval', seconds=900, id='humidity_temperature_logs_job_id', replace_existing=True)
+	# scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+	# scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', replace_existing=True)
+	scheduler.add_job(check_climate, 'interval', seconds=10, id='climate_job_id', replace_existing=True)
+	scheduler.add_job(climate_logs, 'interval', seconds=900, id='climate_logs_job_id', replace_existing=True)
 	scheduler.start()
 
 def button_relay_job(status,gpio_pin,button_job_id):

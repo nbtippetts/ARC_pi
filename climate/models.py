@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class HumidityTemp(models.Model):
+class ClimateLogs(models.Model):
 	humidity = models.IntegerField(default=0)
 	temp = models.IntegerField(default=0)
 	created_at = models.DateTimeField(default=timezone.now)
@@ -10,7 +10,7 @@ class HumidityTemp(models.Model):
 	def __str__(self):
 		return self.humidity, self.temp
 
-class HumidityTempValues(models.Model):
+class ClimateValues(models.Model):
 	humidity_value = models.IntegerField(default=0)
 	buffer_value = models.IntegerField(default=0)
 	temp_value = models.IntegerField(default=0)

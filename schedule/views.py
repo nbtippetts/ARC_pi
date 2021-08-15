@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import datetime, date
 from .models import Schedule, ScheduleLog, RelayStatus
-from humidity.models import Exhaust
+from climate.models import Exhaust
 from .forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm
 from . import start_schedule
 from django.contrib.auth.decorators import login_required
@@ -176,10 +176,11 @@ def relay_on_off(request):
 			context = {
 				'form': form
 			}
-			return render(request, 'schedule.html',context)
+			# next = request.POST.get('next','/')
+			return redirect(request.META.get('HTTP_REFERER'), context)
 	else:
 		form = ScheduleForm()
 	context = {
 		'form': form
 	}
-	return render(request, 'schedule.html',form)
+	return render(request, 'schedule.html',context)

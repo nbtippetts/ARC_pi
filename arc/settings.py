@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*', '172.21.0.2', '172.21.0.1','174.52.250.10', 'arc.dev', 'ar
 # Application definition
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
-    'humidity.apps.HumidityConfig',
+    'climate.apps.ClimateConfig',
     'schedule.apps.ScheduleConfig',
     'streamapp.apps.StreamappConfig',
     'crispy_forms',
@@ -77,7 +77,7 @@ TEMPLATES = [
 
             'libraries':{
                 'schedule_display': 'schedule.templatetags.schedule_display',
-                'humidity_display': 'humidity.templatetags.humidity_display',
+                'climate_display': 'climate.templatetags.climate_display',
             },
         },
     },
@@ -154,7 +154,11 @@ STATICFILES_DIRS = (
 
 
 # do the same for media files, it must match /opt/services/djangoapp/media/
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+MEDIAFILES_DIRS = (
+    os.path.join(BASE_DIR, 'media'),
+)
 
 LOGIN_REDIRECT_URL='homepage'
 LOGIN_URL='login'

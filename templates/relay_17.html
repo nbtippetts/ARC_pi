@@ -8,6 +8,7 @@
 <form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
 	{% csrf_token %}
 	<input type="hidden" name="17" value="17">
+	<input type="hidden" name="next" value="{{ request.path }}">
 	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
 		<button type="submit" class="btn btn-outline-dark btn-sm" name="status" value="True">ON </button>
 		<button type="submit" class="btn btn-outline-dark btn-sm" name="status" value="False">OFF</button>

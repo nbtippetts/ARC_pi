@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humidity_display %}
+{% load climate_display %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div id="content-wrapper" class="d-flex flex-column">
@@ -81,10 +81,10 @@
 				{% current_hum_temp %}
 			</div>
 			<div id="chart_content" class="card-body" style="padding-top: 0px;">
-				{% humidity_tag %}
+				{% climate_tag %}
 			</div>
 		</div>
-		{% humidity_temp_form %}
+		{% set_climate_form %}
 	</div>
 	</div>
 	<div class="row justify-content-center">

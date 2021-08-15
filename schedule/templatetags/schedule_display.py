@@ -1,8 +1,8 @@
 from django import template
 register = template.Library()
 from ..models import Schedule, ScheduleLog, RelayStatus
-from humidity.models import Exhaust
-from humidity.forms import ExhaustForm
+from climate.models import Exhaust
+from climate.forms import ExhaustForm
 from ..forms import RemoveScheduleForm, RelayStatusForm
 
 @register.inclusion_tag('current_lighting_schedule.html')

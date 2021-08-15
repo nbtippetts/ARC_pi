@@ -11,6 +11,7 @@ def index(request):
 
 def gen(camera):
 	while True:
+		time.sleep(0.5)
 		if camera.stopped:
 			print('shutting down camera')
 			break
