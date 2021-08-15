@@ -15,8 +15,8 @@ import time
 
 
 jobstores = {
-	'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@db:5432/arc_db')
-# 'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@localhost:5432/arc_db')
+	# 'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@db:5432/arc_db')
+'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@localhost:5432/arc_db')
 }
 executors = {
 	'default': ThreadPoolExecutor(10),
@@ -309,7 +309,7 @@ def add_schedule(how_often_day, how_often,start_dt,schedule_duration,gpio_pin,sc
 	for often in how_often:
 		trigger_list.append(CronTrigger(hour=often.hour, minute=often.minute))
 	triggers = OrTrigger(trigger_list)
-	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, replace_existing=True)
+	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, misfire_grace_time=None, replace_existing=True)
 	# scheduler.add_job(ScheduleRelay.schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, replace_existing=True)
 	return
 
