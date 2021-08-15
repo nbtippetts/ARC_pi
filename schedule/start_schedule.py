@@ -4,16 +4,13 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.triggers.combining import OrTrigger
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
-import gpiozero
-from django.db import connection
-from datetime import datetime, timedelta, time, date
+# import gpiozero
+from schedule.schedule_relay import ScheduleRelay
+from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
+from humidity.models import Exhaust, HumidityTempValues, HumidityTemp
 from humidity.models import Exhaust
-from .forms import ScheduleForm, RelayStatusForm
 import time
-import json
-import threading
-from django.utils import timezone
 
 
 jobstores = {
@@ -25,8 +22,8 @@ executors = {
 	'processpool': ProcessPoolExecutor(5)
 }
 job_defaults = {
-	'coalesce': True,
-	'max_instances': 25
+	'coalesce': False,
+	'max_instances': 10
 }
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc, daemon=True)
 
@@ -44,9 +41,9 @@ def schedule_relay(*args):
 	print(relay_status.schedule_status)
 	while not break_loop:
 		try:
-			relay = gpiozero.OutputDevice(int(gpio_pin), active_high=False, initial_value=False)
-			print('schedule_relay_job relay on')
-			relay.on()
+			# relay = gpiozero.OutputDevice(int(gpio_pin), active_high=False, initial_value=False)
+			print(f'schedule_relay_job relay {gpio_pin}')
+			# relay.on()
 		except Exception as e:
 			pass
 		relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
@@ -66,23 +63,22 @@ def schedule_relay(*args):
 	schedule_log.start = start_time
 	schedule_log.gpio_pin = gpio_pin
 	schedule_log.save()
-	
+
 def relay_14():
 	try:
-		relay = gpiozero.OutputDevice(14, active_high=False, initial_value=False)
+		# relay = gpiozero.OutputDevice(14, active_high=False, initial_value=False)
 		while True:
 			relay_status = RelayStatus.objects.get(pk=1)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
 					print(' button_relay_14 relay ON')
-					relay.on()
+					# relay.on()
 				except Exception as e:
 					print(e)
 					pass
 			elif relay_status.button_status == 'True' and relay_status.schedule_status == 'True':
 				break
 			else:
-				# relay.off()
 				break
 			time.sleep(1)
 	except Exception as e:
@@ -91,20 +87,19 @@ def relay_14():
 
 def relay_15():
 	try:
-		relay = gpiozero.OutputDevice(15, active_high=False, initial_value=False)
+		# relay = gpiozero.OutputDevice(15, active_high=False, initial_value=False)
 		while True:
 			relay_status = RelayStatus.objects.get(pk=2)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
 					print(' button_relay_15 relay ON')
-					relay.on()
+					# relay.on()
 				except Exception as e:
 					print(e)
 					pass
 			elif relay_status.button_status == 'True' and relay_status.schedule_status == 'True':
 				break
 			else:
-				# relay.off()
 				break
 			time.sleep(3)
 	except Exception as e:
@@ -113,20 +108,19 @@ def relay_15():
 
 def relay_17():
 	try:
-		relay = gpiozero.OutputDevice(17, active_high=False, initial_value=False)
+		# relay = gpiozero.OutputDevice(17, active_high=False, initial_value=False)
 		while True:
 			relay_status = Exhaust.objects.get(pk=1)
 			if relay_status.status == 'True':
 				try:
 					print(' button_relay_17 relay ON')
-					relay.on()
+					# relay.on()
 				except Exception as e:
 					print(e)
 					pass
 			elif relay_status.automation_status == 'False' and relay_status.status == 'True':
 				break
 			else:
-				# relay.off()
 				break
 			time.sleep(3)
 	except Exception as e:
@@ -135,27 +129,141 @@ def relay_17():
 
 def relay_18():
 	try:
-		relay = gpiozero.OutputDevice(18, active_high=False, initial_value=False)
+		# relay = gpiozero.OutputDevice(18, active_high=False, initial_value=False)
 		while True:
 			relay_status = Exhaust.objects.get(pk=2)
 			if relay_status.status == 'True':
 				try:
 					print(' button_relay_18 relay ON')
-					relay.on()
+					# relay.on()
 				except Exception as e:
 					print(e)
 					pass
 			elif relay_status.automation_status == 'False' and relay_status.status == 'True':
 				break
 			else:
-				# relay.off()
 				break
 			time.sleep(3)
 	except Exception as e:
 		print(e)
 		pass
+def humidity_temperature_logs():
+	# sensor = Adafruit_DHT.DHT22
+	pin =4
+	while True:
+		humidity, temperature = 69.0, 69.0
+		# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+		if humidity is not None and temperature is not None:
+			humidity = int(humidity)
+			fahrenheit = (temperature * 9/5) + 32
+			ht_log = HumidityTemp()
+			ht_log.humidity = humidity
+			ht_log.temp = int(fahrenheit)
+			ht_log.save()
+			break
+		else:
+			print('Failed to retrieve data from humidity sensor.')
+			continue
 
+def check_hum_temp():
+	# sensor = Adafruit_DHT.DHT22
+	pin =4
+	humidity, temperature = 69.0, 69.0
+	# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+	if humidity is not None and temperature is not None:
+		humidity = int(humidity)
+		fahrenheit = (temperature * 9/5) + 32
+		try:
+			ht_params = HumidityTempValues.objects.get(pk=1)
+		except Exception as e:
+			ht_params = HumidityTempValues()
+			ht_params.pk=1
+			ht_params.humidity_value=humidity
+			ht_params.buffer_value=5
+			ht_params.temp_value=int(fahrenheit)
+			ht_params.save()
+		ht_params = HumidityTempValues.objects.get(pk=1)
+		humidity_positive = ht_params.humidity_value+ht_params.buffer_value
+		humidity_nagitive = ht_params.humidity_value-ht_params.buffer_value
+		temp_params = ht_params.temp_value+ht_params.buffer_value
+		print(humidity_positive, temp_params)
+		button_job_id = f'button_relay_job_id_18'
+		if humidity >= humidity_positive:
+			try:
+				e = Exhaust.objects.get(pk=2)
+				if e.automation_status == 'True':
+					if e.status == 'True':
+						print('Exhuast arlready running so continue')
+					else:
+						e.job_id=button_job_id
+						e.status=True
+						e.save()
+						button_relay_job('True',18,button_job_id)
+				else:
+					e.job_id=button_job_id
+					e.status=False
+					e.save()
+					button_relay_job('False',18,button_job_id)
+			except Exception as e:
+				pass
+
+
+		elif int(fahrenheit) >= temp_params:
+			try:
+				e = Exhaust.objects.get(pk=2)
+				if e.status == 'True':
+					print('Exhuast arlready running so continue')
+				else:
+					e.job_id=button_job_id
+					e.status=True
+					e.save()
+					button_relay_job('True',18,button_job_id)
+			except Exception as e:
+				pass
+
+		else:
+			try:
+				e = Exhaust.objects.get(pk=2)
+				e.job_id=button_job_id
+				e.status=False
+				e.save()
+				button_relay_job('False',18,button_job_id)
+			except Exception as e:
+				pass
+
+		button_17_job_id = f'button_relay_job_id_17'
+		if humidity <= humidity_nagitive:
+			try:
+				e = Exhaust.objects.get(pk=1)
+				if e.status == 'True':
+					print('Exhuast arlready running so continue')
+				else:
+					e.job_id=button_17_job_id
+					e.status=True
+					e.save()
+					button_relay_job('True',17,button_17_job_id)
+			except Exception as e:
+				pass
+
+		else:
+			try:
+				e = Exhaust.objects.get(pk=1)
+				e.job_id=button_17_job_id
+				e.status=False
+				e.save()
+				button_relay_job('False',17,button_17_job_id)
+			except Exception as e:
+				pass
+
+	else:
+		print('Failed to retrieve data from humidity sensor.')
 def start():
+	# triggers = CronTrigger(second=5)
+	# triggers_log = CronTrigger(minute=15)
+	# scheduler.add_job(check_hum_temp, triggers, id='humidity_temp_job_id', replace_existing=True)
+	# scheduler.add_job(humidity_temperature_logs, triggers_log, id='humidity_temperature_logs_job_id', replace_existing=True)
+	scheduler.add_job(check_hum_temp, 'interval', seconds=10, id='humidity_temp_job_id', replace_existing=True)
+	scheduler.add_job(humidity_temperature_logs, 'interval', seconds=900, id='humidity_temperature_logs_job_id', replace_existing=True)
 	scheduler.start()
 
 def button_relay_job(status,gpio_pin,button_job_id):
@@ -200,6 +308,7 @@ def add_schedule(how_often_day, how_often,start_dt,schedule_duration,gpio_pin,sc
 		trigger_list.append(CronTrigger(hour=often.hour, minute=often.minute))
 	triggers = OrTrigger(trigger_list)
 	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, replace_existing=True)
+	# scheduler.add_job(ScheduleRelay.schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, replace_existing=True)
 	return
 
 def remove_schedule(schedule_job_id,gpio_pin):

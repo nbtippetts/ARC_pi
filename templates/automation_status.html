@@ -5,11 +5,6 @@
 {{ form.media }}
 {% load crispy_forms_tags %}
 
-{% if gpio_18_auto_state == 1 %}
-    <span class="badge badge-pill" style="background-color: #008744; color: white;">ON</span>
-{% else %}
-    <span class="badge badge-pill" style="background-color: #d62d20; color: white;">OFF</span>
-{% endif %}
 <div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
     <button type="submit" class="btn btn-outline-dark" name="auto_status" value="True">Automation ON</button>
     <button type="submit" class="btn btn-outline-dark" name="auto_status" value="False">Automation OFF</button>

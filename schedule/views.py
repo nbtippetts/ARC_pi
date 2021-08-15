@@ -1,14 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db import connection
-from datetime import datetime, timedelta, time, date
+from django.shortcuts import render, redirect
+from datetime import datetime, date
 from .models import Schedule, ScheduleLog, RelayStatus
 from humidity.models import Exhaust
 from .forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm
-import time
-import json
-import threading
-from django.utils import timezone
 from . import start_schedule
 from django.contrib.auth.decorators import login_required
 
@@ -146,27 +140,38 @@ def relay_on_off(request):
 			elif request.POST.get('17'):
 				pk=1
 				gpio_pin=17
-				relay_status = Exhaust.objects.get(pk=pk)
-				relay_status.status=status
-				relay_status.save()
+				if auto_status == None:
+					relay_status = Exhaust.objects.get(pk=pk)
+					relay_status.status=status
+					relay_status.save()
+				else:
+					relay_status = Exhaust.objects.get(pk=pk)
+					relay_status.auto_status=auto_status
+					relay_status.save()
 			elif request.POST.get('18'):
 				pk=2
 				gpio_pin=18
-				relay_status = Exhaust.objects.get(pk=pk)
-				relay_status.status=status
-				relay_status.save()
+				if auto_status == None:
+					relay_status = Exhaust.objects.get(pk=pk)
+					relay_status.status=status
+					relay_status.save()
+				else:
+					relay_status = Exhaust.objects.get(pk=pk)
+					relay_status.auto_status=auto_status
+					relay_status.save()
 			else:
 				print('No GPIO Pin in args')
 
-			button_job_id = f'button_relay_job_id_{gpio_pin}'
-			
+			button_job_id = ''
 			if auto_status == "False":
-				exhaust_relay_status = Exhaust.objects.get(pk=pk)
-				exhaust_relay_status.automation_status=auto_status
-				exhaust_relay_status.save()
-				start_schedule.button_relay_job(auto_status,gpio_pin,'humidity_temp_job_id')
-			
-			start_schedule.button_relay_job(status,gpio_pin,button_job_id)
+				button_job_id = f'humidity_temp_job_id'
+				start_schedule.button_relay_job(auto_status,gpio_pin,button_job_id)
+			elif auto_status == "True":
+				button_job_id = f'humidity_temp_job_id'
+				start_schedule.button_relay_job(auto_status,gpio_pin,button_job_id)
+			else:
+				button_job_id = f'button_relay_job_id_{gpio_pin}'
+				start_schedule.button_relay_job(status,gpio_pin,button_job_id)
 			form = ScheduleForm()
 			context = {
 				'form': form

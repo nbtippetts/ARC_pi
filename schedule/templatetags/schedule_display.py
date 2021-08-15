@@ -3,9 +3,7 @@ register = template.Library()
 from ..models import Schedule, ScheduleLog, RelayStatus
 from humidity.models import Exhaust
 from humidity.forms import ExhaustForm
-from ..forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm
-from datetime import datetime
-import RPi.GPIO as GPIO
+from ..forms import RemoveScheduleForm, RelayStatusForm
 
 @register.inclusion_tag('current_lighting_schedule.html')
 def current_lighting_schedule():

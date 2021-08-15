@@ -5,7 +5,6 @@ from ..forms import HumidityTempForm, ExhaustForm
 from ..hum_temp import get_humidity_temperature
 from schedule.models import RelayStatus, Schedule
 from schedule.forms import RelayStatusForm
-from datetime import datetime
 
 @register.inclusion_tag('current_humidity.html')
 def show_humidity():
@@ -81,7 +80,7 @@ def current_hum_temp():
 		'temp_value':current_values.temp_value,}
 
 @register.inclusion_tag('log_data.html')
-def log_data():	
+def log_data():
 	log_data = HumidityTemp.objects.all().order_by('-created_at')[:25]
 	return {
 		'table_log_data': log_data,}

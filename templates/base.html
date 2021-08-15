@@ -19,7 +19,7 @@
   <link href="{% static 'css/login.css' %}" rel="stylesheet">
   <!-- Bootstrap core JavaScript-->
   <script src="{% static 'js/jquery.js' %}"></script>
-  
+
   <!-- Custom scripts for all pages-->
   <script src="{% static 'js/Chart.min.js' %}"></script>
   <script src="{% static 'js/knob.js' %}"></script>
@@ -40,7 +40,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
 
-    
+
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
       <!-- Sidebar -->
@@ -58,10 +58,10 @@
                 <a class="nav-link" href="{% url 'schedule' %}">Schedule</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'humidity_view' %}">Humidity/Temperature</a>
+                <a class="nav-link" href="{% url 'humidity_view' %}">Climate</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'video_view' %}">Camera Feed</a>
+                <a class="nav-link" href="{% url 'video_view' %}">Camera</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
@@ -82,7 +82,7 @@
       </nav>
       <!-- End of Sidebar -->
 
-      
+
       {% block content %}{% endblock %}
 
       <!-- Footer -->
