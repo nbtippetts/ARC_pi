@@ -1,36 +1,21 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{{ form.media }}
-{% load static %}
-  <link href="{% static 'css/login.css' %}" rel="stylesheet">
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div class="sidenav">
-    <div class="login-main-text">
-       <h2>Application<br> Registration Page</h2>
-       <p>register from here to access.</p>
-    </div>
- </div>
- <div class="main">
-    <div class="col-md-6 col-sm-12">
+    <div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Register</legend>
-                {% bootstrap_form form %}
+                <legend class="border-bottom mb-4">Join Today</legend>
+                {{ form }}
             </fieldset>
             <div class="form-group">
-                  <button type="submit" class="btn btn-secondary">Register</button>
+                <button class="btn btn-outline-info" type="submit">Sign Up</button>
             </div>
         </form>
-        <div class="mt-4 text-center small">
-            <span class="mr-2">
-                <small class="text-muted">
-                    Already Have an Account? <a class="ml-2" href="{% url 'login' %}">Sign In Now</a>
-                </small>
-            </span>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account? <a class="ml-2" href="#">Sign In</a>
+            </small>
         </div>
-       
     </div>
- </div>
 {% endblock content %}
