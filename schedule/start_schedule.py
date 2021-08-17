@@ -52,7 +52,7 @@ def schedule_relay(*args):
 			break_loop=True
 		if end_dt < datetime.now():
 			break_loop = True
-		time.sleep(1)
+		time.sleep(3)
 
 	relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
 	relay_status.schedule_status=False
@@ -81,7 +81,7 @@ def relay_14():
 				break
 			else:
 				break
-			time.sleep(1)
+			time.sleep(5)
 	except Exception as e:
 		print(e)
 		pass
@@ -103,7 +103,7 @@ def relay_15():
 				break
 			else:
 				break
-			time.sleep(3)
+			time.sleep(5)
 	except Exception as e:
 		print(e)
 		pass
@@ -124,7 +124,7 @@ def relay_17():
 				break
 			else:
 				break
-			time.sleep(3)
+			time.sleep(5)
 	except Exception as e:
 		print(e)
 		pass
@@ -145,7 +145,7 @@ def relay_18():
 				break
 			else:
 				break
-			time.sleep(3)
+			time.sleep(5)
 	except Exception as e:
 		print(e)
 		pass
@@ -245,7 +245,7 @@ def check_climate():
 def climate_logs():
 	sensor = Adafruit_DHT.DHT22
 	pin =4
-	while True:
+	for i in range(20):
 		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 		if humidity is not None and temperature is not None:
 			humidity = int(humidity)
@@ -256,16 +256,14 @@ def climate_logs():
 			ht_log.save()
 			break
 		else:
-			print('Failed to retrieve data from climate sensor.')
+			print('Failed to retrieve data from humidity sensor.')
 			continue
 
 def start():
-	# triggers = CronTrigger(second=5)
-	# triggers_log = CronTrigger(minute=15)
-	# scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
-	# scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', replace_existing=True)
-	scheduler.add_job(check_climate, 'interval', seconds=10, id='climate_job_id', replace_existing=True)
-	scheduler.add_job(climate_logs, 'interval', seconds=900, id='climate_logs_job_id', replace_existing=True)
+	triggers = CronTrigger(second='*/5')
+	triggers_log = CronTrigger(minute='*/15')
+	scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', replace_existing=True)
 	scheduler.start()
 
 def button_relay_job(status,gpio_pin,button_job_id):
