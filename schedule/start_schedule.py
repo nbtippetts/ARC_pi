@@ -6,7 +6,6 @@ from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
 import gpiozero
 import Adafruit_DHT
-from schedule.schedule_relay import ScheduleRelay
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
 from climate.models import Exhaust, ClimateValues, ClimateLogs
@@ -263,7 +262,7 @@ def start():
 	triggers = CronTrigger(second='*/5')
 	triggers_log = CronTrigger(minute='*/15')
 	scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
-	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', replace_existing=True)
+	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
 	scheduler.start()
 
 def button_relay_job(status,gpio_pin,button_job_id):
@@ -308,7 +307,6 @@ def add_schedule(how_often_day, how_often,start_dt,schedule_duration,gpio_pin,sc
 		trigger_list.append(CronTrigger(hour=often.hour, minute=often.minute))
 	triggers = OrTrigger(trigger_list)
 	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, misfire_grace_time=None, replace_existing=True)
-	# scheduler.add_job(ScheduleRelay.schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, replace_existing=True)
 	return
 
 def remove_schedule(schedule_job_id,gpio_pin):
