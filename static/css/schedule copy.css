@@ -1,0 +1,228 @@
+@charset "utf-8";
+	.card-body input {
+	padding: 20px;
+	width: 100%;
+	font-size: 16px;
+	border-radius: 3px;
+	background: #EDECEB;
+	background: rgba(237, 236, 235, 1);
+	border-style: Solid;
+	border-color: #403D39;
+	border-color: rgba(64, 61, 57, 1);
+	border-width: 1px;
+	height: 46px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.log_box_shadow
+{
+	background : #939598;
+	background : rgba(147, 149, 152, 1);
+	width : 663px;
+	height : 221px;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+}
+.schedule_box
+{
+	background : #EDECEB;
+	background : rgba(237, 236, 235, 1);
+	width : 692px;
+	height : 506px;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+.schedule_shadow
+{
+	background : #939598;
+	background : rgba(147, 149, 152, 1);
+	width : 660px;
+	height : 473px;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+}
+.image
+{
+	background-image : url(image.png);
+	background-repeat : no-repeat;
+	width : 466px;
+	height : 152px;
+}
+.log-box
+{
+	background : #EDECEB;
+	background : rgba(237, 236, 235, 1);
+	width : 692px;
+	height : 240px;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+.card-box_1_
+{
+	background : #EDECEB;
+	background : rgba(237, 236, 235, 1);
+	width : 333px;
+	height : 222px;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+}
+.card-shadow
+{
+	background : #939598;
+	background : rgba(147, 149, 152, 1);
+	width : 321px;
+	height : 208px;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+}
+
+.NormalCharacterStyle17
+{
+	font-family : Monaco;
+	font-size : 18px;
+	color : #231F20;
+	color : rgb(35, 31, 32);
+}
+.NormalCharacterStyle15
+{
+	font-family : Monaco;
+	font-size : 11px;
+	color : #231F20;
+	color : rgb(35, 31, 32);
+}
+.NormalCharacterStyle13
+{
+	font-family : Helvetica;
+	font-size : 15px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle14
+{
+	font-family : Helvetica;
+	font-size : 20px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle16
+{
+	font-family : Helvetica;
+	font-size : 20px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle18
+{
+	font-family : Helvetica;
+	font-size : 20px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle3
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle10
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle
+{
+	font-family : Monaco;
+	font-size : 11px;
+	color : #231F20;
+	color : rgb(35, 31, 32);
+}
+.NormalCharacterStyle9
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle12
+{
+	font-family : Helvetica;
+	font-size : 15px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle1
+{
+	font-family : Monaco;
+	font-size : 27px;
+	vertical-align : super;
+	color : #EDECEB;
+	color : rgb(237, 236, 235);
+}
+.NormalCharacterStyle2
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle4
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle5
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle7
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle6
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}
+.NormalCharacterStyle11
+{
+	font-family : Helvetica;
+	font-size : 15px;
+	color : #22333B;
+	color : rgb(34, 51, 59);
+}
+.NormalCharacterStyle8
+{
+	font-family : Monaco;
+	font-size : 17px;
+	vertical-align : super;
+	color : #252422;
+	color : rgb(37, 36, 34);
+}

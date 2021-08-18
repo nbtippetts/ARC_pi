@@ -1,0 +1,73 @@
+@charset "utf-8";
+	.circle
+{
+	background : #CCC5B9;
+	background : rgba(204, 197, 185, 1);
+	width : 390px;
+	height : 390px;
+}
+.line
+{
+	border-style : Solid;
+	border-color : #EDECEB;
+	border-color : rgba(237, 236, 235, 1);
+	border-width : 1px;
+	width : 1404px;
+	height : 0px;
+}
+.NormalCharacterStyle3
+{
+	font-family : Helvetica;
+	font-size : 24px;
+	letter-spacing : 7.2px;
+	text-transform : uppercase;
+	color : #EDECEB;
+	color : rgb(237, 236, 235);
+}
+.NormalCharacterStyle
+{
+	font-family : Helvetica;
+	font-size : 22px;
+	letter-spacing : 4.4px;
+	color : #EDECEB;
+	color : rgb(237, 236, 235);
+}
+.NormalCharacterStyle1
+{
+	font-family : Monaco;
+	font-size : 22px;
+	letter-spacing : 4.4px;
+	color : #231F20;
+	color : rgb(35, 31, 32);
+}
+.NormalCharacterStyle2
+{
+	font-family : Helvetica;
+	font-size : 22px;
+	letter-spacing : 4.4px;
+	color : #EDECEB;
+	color : rgb(237, 236, 235);
+}
+.NormalCharacterStyle4
+{
+	font-family : MBF Prime;
+	font-size : 244px;
+	color : #EDECEB;
+	color : rgb(237, 236, 235);
+}
+.background-image
+{
+	background-image : url(background-image.png);
+	background-repeat : no-repeat;
+	opacity : 0.65;
+	width : 1647px;
+	height : 877px;
+	filter: alpha(opacity=65) progid:DXImageTransform.Microsoft.Alpha(opacity=65) ;
+}
+.header-background
+{
+	background : #252422;
+	background : rgba(37, 36, 34, 1);
+	width : 1669px;
+	height : 550px;
+}

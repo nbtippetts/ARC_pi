@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_toggle_switch_widget',
     'bootstrap4',
     'django_forms_bootstrap',
     'bootstrap_datepicker_plus',
@@ -160,7 +161,7 @@ MEDIAFILES_DIRS = (
     os.path.join(BASE_DIR, 'media'),
 )
 
-LOGIN_REDIRECT_URL='homepage'
+LOGIN_REDIRECT_URL='schedule'
 LOGIN_URL='login'
 EMAIL_BACKED='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='stmp.gmail.com'

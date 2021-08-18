@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <meta charset="utf-8">
@@ -8,94 +9,129 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <title>ARC Dashboard</title>
-<!------ Include the above in your HEAD tag ---------->
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <!------ Include the above in your HEAD tag ---------->
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <!-- Custom styles for this template-->
   {% load static %}
-  <link href="{% static 'css/arc.css' %}" rel="stylesheet">
-  <link href="{% static 'css/relay_buttons.css' %}" rel="stylesheet">
-  <link href="{% static 'css/login.css' %}" rel="stylesheet">
-  <!-- Bootstrap core JavaScript-->
-  <script src="{% static 'js/jquery.js' %}"></script>
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
-  <!-- Custom scripts for all pages-->
+
+  <script src="{% static 'js/jquery.js' %}"></script>
   <script src="{% static 'js/Chart.min.js' %}"></script>
   <script src="{% static 'js/knob.js' %}"></script>
 
-<style>
-  @media screen and (min-width: 0px) and (max-width: 765px) {
-    #chart_content {
-      display: none;
+  <style>
+    @font-face {
+      font-family:'helvetica-bold';
+      src: url("{% static 'fonts/Helvetica-Bold.ttf' %}");
     }
-    #chart_tit {
-      display: none;
+    @font-face {
+      font-family:'helvetica-boldoblique';
+      src: url("{% static 'fonts/Helvetica-BoldOblique.ttf' %}");
     }
-  }
-</style>
+    @font-face {
+      font-family:'helvetica-light';
+      src: url("{% static 'fonts/helvetica-light-587ebe5a59211.ttf' %}");
+    }
+    @font-face {
+      font-family:'helvetica-oblique';
+      src: url("{% static 'fonts/Helvetica-Oblique.ttf' %}");
+    }
+    @font-face {
+      font-family:'helvetica';
+      src: url("{% static 'fonts/Helvetica.ttf' %}");
+    }
+    @font-face {
+      font-family:'MBF_prime';
+      src: url("{% static 'fonts/MBF_Prime.otf' %}");
+    }
+    @font-face {
+      font-family:'monaco_linux';
+      src: url("{% static 'fonts/Monaco_Linux.ttf' %}");
+    }
+    @media screen and (min-width: 0px) and (max-width: 765px) {
+      #chart_content {
+        display: none;
+      }
+
+      #chart_tit {
+        display: none;
+      }
+    }
+
+    .wrapper,html,body {
+      height: 100%;
+      margin: 0;
+    }
+  </style>
 </head>
 
-<body id="page-top">
+<body>
   <!-- Page Wrapper -->
-  <div id="wrapper">
+  <div class="wrapper">
 
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
       <!-- Sidebar -->
-      <nav class="sb-topnav navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'homepage' %}">ARC</a>
+      <nav class="navbar navbar-custom navbar-expand-md">
+        <a class="navbar-brand" href="{% url 'homepage' %}">
+          <img src="{% static 'img/arc-logo-nav.png' %}" alt="" height="36">
+        </a>
         <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon custom-toggler"></span>
         </button>
         <!-- Navbar links -->
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'schedule' %}">Schedule</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'climate_view' %}">Climate</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'video_view' %}">Camera</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'schedule' %}">Schedule</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'climate_view' %}">Climate</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'video_view' %}">Camera</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'info' %}">Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
             {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">Register</a>
-              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
             {% endif %}
           </ul>
         </div>
       </nav>
       <!-- End of Sidebar -->
+    </div>
 
 
-      {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+    <!-- Footer -->
+    <!-- <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright &copy; ARC 2020</span>
           </div>
         </div>
-      </footer>
-      <!-- End of Footer -->
+      </footer> -->
+    <!-- End of Footer -->
 
-    </div>
     <!-- End of Content Wrapper -->
 
   </div>
@@ -109,9 +145,11 @@
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
 </body>

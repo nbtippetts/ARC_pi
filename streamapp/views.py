@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http.response import StreamingHttpResponse
-from streamapp.camera import VideoCamera
+# from streamapp.camera import VideoCamera
 from django.contrib.auth.decorators import login_required
 import time
 
@@ -23,7 +23,7 @@ def gen(camera):
 
 def video_feed(request):
 	try:
-		return StreamingHttpResponse(gen(VideoCamera()),content_type='multipart/x-mixed-replace; boundary=frame')
+		return #StreamingHttpResponse(gen(VideoCamera()),content_type='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
 		print(e)
 		pass

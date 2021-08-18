@@ -1,21 +1,28 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% extends "base.html" %}
+{% load static %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
+<link href="{% static 'css/register.css' %}" rel="stylesheet">
+<div class="register_wrapper">
+    <div class="register_form">
+        <div class="title">
+            <img src="{% static 'img/arc-logo-dark.png' %}" alt="" height="100">
+            <div class="register_line"></div>
+        </div>
+        <form method="POST" action="" style="padding-top: 20px;">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
-                {{ form }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+            {% for field in form %}
+            <div class="input_wrap">
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="input_wrap">
+                <span class="error_msg">Incorrect username or password. Please try again</span>
+                <button type="submit" id="register_btn" class="arc_buttons">SIGN UP</button>
             </div>
         </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="#">Sign In</a>
-            </small>
+        <div class="register-footer">
+            Already Have An Account?<a class="ml-2" href="{% url 'login' %}">Sign In</a>
         </div>
     </div>
+</div>
 {% endblock content %}

@@ -5,18 +5,18 @@ body{
 	background : rgba(204, 197, 185, 1);
 }
 
-.login_wrapper{
+.register_wrapper{
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.login_form{
+.register_form{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	height: 500px;
+	height: 600px;
 	padding: 35px 50px;
 	background-color: #EDECEB;
     background-color: rgba(237, 236, 235, 1);
@@ -25,7 +25,7 @@ body{
     -webkit-border-radius: 31px;
 }
 
-.login_form .title .login_line{
+.register_form .title .register_line{
 	border-bottom : Solid;
 	border-color : #252422;
 	border-color : rgba(37, 36, 34, 0.5);
@@ -33,33 +33,33 @@ body{
 	padding: 5px;
 }
 
-.login_form .title{
+.register_form .title{
 	text-align: center;
 	margin-bottom: 20px;
 	font-weight: 700;
 	font-size: 24px;
 }
 
-.login_form .input_wrap{
+.register_form .input_wrap{
 	margin-bottom: 20px;
 	width: 100%;
 	position: relative;
 	align-self: center;
 }
 
-.login_form .input_wrap:last-child{
+.register_form .input_wrap:last-child{
 	margin-bottom: 0;
 	padding-top: 20px;
 	display: flex;
     justify-content: center;
 }
 
-.login_form .input_wrap label{
+.register_form .input_wrap label{
 	display: block;
 	margin-bottom: 5px;
 }
 
-.login_form .input_wrap input{
+.register_form .input_wrap input{
 	padding: 20px;
 	width: 100%;
 	font-size: 16px;
@@ -76,29 +76,29 @@ body{
 	-webkit-border-radius: 5px;
 }
 
-.login_form .input_wrap .input{
+.register_form .input_wrap .input{
 	background: #f5f4f4;
 	padding-right: 35px;
 }
 
 
-.login_form .input_wrap .input:focus{
+.register_form .input_wrap .input:focus{
 	border-color: #1dbf73;
 }
 
-.login_form .input_wrap .input_field{
+.register_form .input_wrap .input_field{
 	position: relative;
 }
 
 
-.login_form .input_wrap .error_msg{
+.register_form .input_wrap .error_msg{
 	font-size: 15px;
 	margin-bottom: 5px;
 	color: #f74040;
 	display: none;
 }
 
-.login-footer
+.register-footer
 {
 	align-self: center;
 	padding-top: 40px;
@@ -108,7 +108,7 @@ body{
 	color : rgb(64, 61, 57);
 	filter: alpha(opacity=46) progid:DXImageTransform.Microsoft.Alpha(opacity=46);
 }
-.login-footer .ml-2 {
+.register-footer .ml-2 {
 	font-family : Helvetica;
 	font-weight: bold;
 	font-size : 16px;

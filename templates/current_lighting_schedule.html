@@ -1,4 +1,7 @@
 {% block content %}
-    <h5 class="card-title">Current Lighting Schedule</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ schedule_param.schedule_interval }} {{ schedule_param.duration }}</h6>
+{% for sch in object.schedule_param.all %}
+    <div class="card-subtitle mb-2 text-muted">{{ sch.schedule_interval }} {{ sch.duration }}</div>
+    {% empty %}
+    <div class="card-subtitle mb-2 text-muted">No Schedule</div>
+    {% endfor %}
 {% endblock content %}

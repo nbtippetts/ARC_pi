@@ -7,18 +7,18 @@ from ..forms import RemoveScheduleForm, RelayStatusForm
 
 @register.inclusion_tag('current_lighting_schedule.html')
 def current_lighting_schedule():
-	try:
-		schedule_param = Schedule.objects.get(gpio_pin=14)
-		return {'schedule_param': schedule_param}
-	except Exception as e:
-		return {'schedule_param': 'None'}
+	schedule_param = Schedule.objects.get(gpio_pin=14)
+	return {'schedule_param': schedule_param}
+	# try:
+	# except Exception as e:
+	# 	return {'schedule_param': []}
 @register.inclusion_tag('current_watering_schedule.html')
 def current_watering_schedule():
-	try:
-		schedule_param = Schedule.objects.get(gpio_pin=15)
-		return {'schedule_param': schedule_param}
-	except Exception as e:
-		return {'schedule_param': 'None'}
+	schedule_param = Schedule.objects.get(gpio_pin=15)
+	return {'schedule_param': schedule_param}
+	# try:
+	# except Exception as e:
+	# 	return {'schedule_param': []}
 
 @register.inclusion_tag('gpio_14_schedule_log.html')
 def show_gpio_14_schedule_log():
@@ -59,7 +59,14 @@ def gpio_14_state():
 	form = RelayStatusForm(initial={
 		'status': relay_state.button_status,
 	})
-	return {'button_form': form}
+	schedule_status = relay_state.schedule_status
+	button_status = relay_state.button_status
+	pin_state = 0
+	if button_status == 'True' or schedule_status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	return {'button_form': form, 'gpio_14_state':pin_state}
 
 @register.inclusion_tag('relay_15.html')
 def gpio_15_state():
@@ -67,7 +74,14 @@ def gpio_15_state():
 	form = RelayStatusForm(initial={
 		'status': relay_state.button_status,
 	})
-	return {'button_form': form}
+	schedule_status = relay_state.schedule_status
+	button_status = relay_state.button_status
+	pin_state = 0
+	if button_status == 'True' or schedule_status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	return {'button_form': form, 'gpio_15_state':pin_state}
 
 @register.inclusion_tag('relay_17.html')
 def gpio_17_state():
@@ -75,7 +89,15 @@ def gpio_17_state():
 	form = ExhaustForm(initial={
 		'status': relay_state.status,
 	})
-	return {'button_form': form}
+	if relay_state.automation_status == 'True':
+		auto_pin_state = 1
+	else:
+		auto_pin_state = 0
+	if relay_state.status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	return {'button_form': form,'gpio_17_state':pin_state, 'gpio_17_auto_state':auto_pin_state}
 
 @register.inclusion_tag('relay_18.html')
 def gpio_18_state():
@@ -83,12 +105,15 @@ def gpio_18_state():
 	form = ExhaustForm(initial={
 		'status': relay_state.status,
 	})
-	pin_state = 0
 	if relay_state.automation_status == 'True':
 		auto_pin_state = 1
 	else:
 		auto_pin_state = 0
-	return {'button_form': form, 'gpio_18_auto_state':auto_pin_state}
+	if relay_state.status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	return {'button_form': form,'gpio_18_state':pin_state, 'gpio_18_auto_state':auto_pin_state}
 
 @register.inclusion_tag('gpio_14.html')
 def gpio_14_state_function():
@@ -114,22 +139,32 @@ def gpio_15_state_function():
 		pin_state = 0
 	return {'gpio_15_state':pin_state}
 
-@register.inclusion_tag('gpio_17.html')
-def gpio_17_state_function():
-	relay_state = Exhaust.objects.get(pk=1)
-	pin_state = 0
-	if relay_state.status == 'True':
-		pin_state = 1
-	else:
-		pin_state = 0
-	return {'gpio_17_state':pin_state}
+# @register.inclusion_tag('gpio_17.html')
+# def gpio_17_state_function():
+# 	relay_state = Exhaust.objects.get(pk=1)
+# 	pin_state = 0
+# 	auto_pin_state = 0
+# 	if relay_state.status == 'True':
+# 		pin_state = 1
+# 	else:
+# 		pin_state = 0
+# 	if relay_state.automation_status == 'True':
+# 		auto_pin_state = 1
+# 	else:
+# 		auto_pin_state = 0
+# 	return {'gpio_17_state':pin_state,'gpio_17_auto_state':auto_pin_state}
 
-@register.inclusion_tag('gpio_18.html')
-def gpio_18_state_function():
-	relay_state = Exhaust.objects.get(pk=2)
-	pin_state = 0
-	if relay_state.status == 'True':
-		pin_state = 1
-	else:
-		pin_state = 0
-	return {'gpio_18_state':pin_state}
+# @register.inclusion_tag('gpio_18.html')
+# def gpio_18_state_function():
+# 	relay_state = Exhaust.objects.get(pk=2)
+# 	pin_state = 0
+# 	auto_pin_state = 0
+# 	if relay_state.status == 'True':
+# 		pin_state = 1
+# 	else:
+# 		pin_state = 0
+# 	if relay_state.automation_status == 'True':
+# 		auto_pin_state = 1
+# 	else:
+# 		auto_pin_state = 0
+# 	return {'gpio_18_state':pin_state,'gpio_18_auto_state':auto_pin_state}

@@ -1,0 +1,128 @@
+@charset "utf-8";
+body
+{
+	background : #CCC5B9;
+	background : rgba(204, 197, 185, 1);
+    height: 100%;
+    margin: 0;
+}
+.log-row {
+    display: flex;
+  -webkit-display: box;
+  -moz-display: box;
+  -ms-display: flexbox;
+  -webkit-display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  padding: 6%;
+  margin: 0;
+}
+.card-body {
+    display: flex;
+    flex-direction: column;
+    background-color: #EDECEB;
+    background-color: rgba(237, 236, 235, 1);
+    border-radius: 31px;
+    -moz-border-radius: 31px;
+    -webkit-border-radius: 31px;
+}
+
+.card-title
+{
+    align-self: center;
+	border-style : Solid;
+	border-color : #252422;
+	border-color : rgba(37, 36, 34, 0.5);
+	border-width : 1px;
+	width : 60%;
+	height : 0px;
+}
+
+.login-input-field{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1em;
+}
+
+.login-form {
+width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 2em; */
+    padding-bottom: 3em;
+    border-radius: 8px;
+}
+.username-box::placeholder {
+    padding-left: 5px;
+}
+.username-box
+{
+	background : #EDECEB;
+	background : rgba(237, 236, 235, 1);
+	border-style : Solid;
+	border-color : #403D39;
+	border-color : rgba(64, 61, 57, 1);
+	border-width : 1px;
+	height : 46px;
+    width: 65%;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+@media screen and (min-width: 0px) and (max-width: 765px) {
+      .username-box
+      {
+          background : #EDECEB;
+          background : rgba(237, 236, 235, 1);
+          border-style : Solid;
+          border-color : #403D39;
+          border-color : rgba(64, 61, 57, 1);
+          border-width : 1px;
+          height : 46px;
+          width: 100%;
+          border-radius : 5px;
+          -moz-border-radius : 5px;
+          -webkit-border-radius : 5px;
+      }
+  }
+.login-footer
+{
+    align-self: center;
+	font-family : Helvetica;
+	font-size : 16px;
+	color : #403D39;
+	color : rgb(64, 61, 57);
+	opacity : 0.46;
+	filter: alpha(opacity=46) progid:DXImageTransform.Microsoft.Alpha(opacity=46) ;
+}
+
+.login-background
+{
+	background : #EDECEB;
+	background : rgba(237, 236, 235, 1);
+	border-radius : 31px;
+	-moz-border-radius : 31px;
+	-webkit-border-radius : 31px;
+}
+.buttons {
+    align-self: center;
+    background-color: #252422;
+    background-color: rgba(37, 36, 34, 1);
+    color: #EDECEB;
+    width: 113px;
+    height: 40px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 6px;
+}
+.card-img {
+    align-self: center;
+    padding-bottom: 10px;
+    padding-top: 20px;
+    width: 50%;
+    height: auto;
+}
