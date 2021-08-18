@@ -4,8 +4,8 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.triggers.combining import OrTrigger
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
-# import gpiozero
-# import Adafruit_DHT
+import gpiozero
+import Adafruit_DHT
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
 from climate.models import Exhaust, ClimateValues, ClimateLogs
@@ -39,7 +39,7 @@ def schedule_relay(*args):
 	start_time = datetime.now()
 	break_loop = args[2]
 	print(relay_status.schedule_status)
-	# relay = gpiozero.OutputDevice(int(gpio_pin), active_high=True, initial_value=False)
+	relay = gpiozero.OutputDevice(int(gpio_pin), active_high=True, initial_value=False)
 	while not break_loop:
 		try:
 			print(f'schedule_relay_job relay {gpio_pin}')
@@ -51,7 +51,7 @@ def schedule_relay(*args):
 			break_loop=True
 		if end_dt < datetime.now():
 			break_loop = True
-		time.sleep(5)
+		time.sleep(3)
 
 	relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
 	relay_status.schedule_status=False
@@ -66,7 +66,7 @@ def schedule_relay(*args):
 
 def relay_14():
 	try:
-		# relay = gpiozero.OutputDevice(14, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(14, active_high=True, initial_value=False)
 		while True:
 		# while relay.active_high:
 			relay_status = RelayStatus.objects.get(pk=1)
@@ -88,7 +88,7 @@ def relay_14():
 
 def relay_15():
 	try:
-		# relay = gpiozero.OutputDevice(15, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(15, active_high=True, initial_value=False)
 		# print(relay.active_high)
 		while True:
 		# while relay.active_high:
@@ -111,7 +111,7 @@ def relay_15():
 
 def relay_17():
 	try:
-		# relay = gpiozero.OutputDevice(17, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(17, active_high=True, initial_value=False)
 		while True:
 		# while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=1)
@@ -133,7 +133,7 @@ def relay_17():
 
 def relay_18():
 	try:
-		# relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
 		while True:
 		# while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=2)
@@ -154,10 +154,10 @@ def relay_18():
 		pass
 
 def check_climate():
-	# sensor = Adafruit_DHT.DHT22
+	sensor = Adafruit_DHT.DHT22
 	pin =4
 	humidity, temperature = 69.0,69.0
-	# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 	if humidity is not None and temperature is not None:
 		humidity = int(humidity)
 		fahrenheit = (temperature * 9/5) + 32
@@ -247,11 +247,10 @@ def check_climate():
 		print('Failed to retrieve data from climate sensor.')
 
 def climate_logs():
-	# sensor = Adafruit_DHT.DHT22
+	sensor = Adafruit_DHT.DHT22
 	pin =4
-	while True:
-		humidity, temperature = 69.0,69.0
-		# humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+	for i in range(20):
+		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 		if humidity is not None and temperature is not None:
 			humidity = int(humidity)
 			fahrenheit = (temperature * 9/5) + 32
@@ -261,15 +260,14 @@ def climate_logs():
 			ht_log.save()
 			break
 		else:
-			print('Failed to retrieve data from climate sensor.')
-			time.sleep(1)
+			print('Failed to retrieve data from humidity sensor.')
 			continue
 
 def start():
 	triggers = CronTrigger(second='*/5')
 	triggers_log = CronTrigger(minute='*/15')
 	scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
-	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', replace_existing=True)
+	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
 	scheduler.start()
 
 def button_relay_job(status,gpio_pin,button_job_id):
