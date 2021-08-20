@@ -13,11 +13,19 @@ def set_climate(request):
 	if request.method == 'POST':
 		form = ClimateValuesForm(request.POST)
 		if form.is_valid():
-			data = ClimateValues.objects.get(pk=1)
-			data.humidity_value = form.cleaned_data['humidity_value']
-			data.buffer_value = form.cleaned_data['buffer_value']
-			data.temp_value = form.cleaned_data['temp_value']
-			data.save()
+			day_values = ClimateValues.objects.get(pk=1)
+			day_values.humidity_value = form.cleaned_data['humidity_value_day']
+			day_values.buffer_value = form.cleaned_data['buffer_value_day']
+			day_values.temp_value = form.cleaned_data['temp_value_day']
+			day_values.save()
+
+			night_values = ClimateValues.objects.get(pk=2)
+			night_values.humidity_value = form.cleaned_data['humidity_value_night']
+			night_values.buffer_value = form.cleaned_data['buffer_value_night']
+			night_values.temp_value = form.cleaned_data['temp_value_night']
+			night_values.start_time = form.cleaned_data['start_time']
+			night_values.end_time = form.cleaned_data['end_time']
+			night_values.save()
 			print('Humidity and temperature values saved successfully.')
 			ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
 			context = {'data': ht_obj,'form':form}

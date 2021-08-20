@@ -1,5 +1,5 @@
 {% block content %}
-{% for sch in object.schedule_param.all %}
+{% for sch in schedule_param %}
 <div class="card-subtitle mb-2 text-muted">{{ sch.schedule_interval }} {{ sch.duration }}</div>
 {% empty %}
 <div class="card-subtitle mb-2 text-muted">No Schedule</div>

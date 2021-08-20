@@ -67,8 +67,7 @@ def schedule_relay(*args):
 def relay_14():
 	try:
 		relay = gpiozero.OutputDevice(14, active_high=True, initial_value=False)
-		while True:
-		# while relay.active_high:
+		while relay.active_high:
 			relay_status = RelayStatus.objects.get(pk=1)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
@@ -90,8 +89,7 @@ def relay_15():
 	try:
 		relay = gpiozero.OutputDevice(15, active_high=True, initial_value=False)
 		# print(relay.active_high)
-		while True:
-		# while relay.active_high:
+		while relay.active_high:
 			relay_status = RelayStatus.objects.get(pk=2)
 			if relay_status.button_status == 'True' and relay_status.schedule_status == 'False':
 				try:
@@ -112,8 +110,7 @@ def relay_15():
 def relay_17():
 	try:
 		relay = gpiozero.OutputDevice(17, active_high=True, initial_value=False)
-		while True:
-		# while relay.active_high:
+		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=1)
 			if relay_status.status == 'True':
 				try:
@@ -134,8 +131,7 @@ def relay_17():
 def relay_18():
 	try:
 		relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
-		while True:
-		# while relay.active_high:
+		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=2)
 			if relay_status.status == 'True':
 				try:
@@ -156,21 +152,37 @@ def relay_18():
 def check_climate():
 	sensor = Adafruit_DHT.DHT22
 	pin =4
-	humidity, temperature = 69.0,69.0
 	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 	if humidity is not None and temperature is not None:
 		humidity = int(humidity)
 		fahrenheit = (temperature * 9/5) + 32
+		# This is were we will check for day time param or night time params
 		try:
-			ht_params = ClimateValues.objects.get(pk=1)
+			ht_day_params = ClimateValues.objects.get(pk=1)
 		except Exception as e:
-			ht_params = ClimateValues()
-			ht_params.pk=1
-			ht_params.humidity_value=humidity
-			ht_params.buffer_value=5
-			ht_params.temp_value=int(fahrenheit)
-			ht_params.save()
-		ht_params = ClimateValues.objects.get(pk=1)
+			ht_day_params = ClimateValues()
+			ht_day_params.pk=1
+			ht_day_params.humidity_value=humidity
+			ht_day_params.buffer_value=5
+			ht_day_params.temp_value=int(fahrenheit)
+			ht_day_params.save()
+		try:
+			ht_night_params = ClimateValues.objects.get(pk=2)
+		except Exception as e:
+			ht_night_params = ClimateValues()
+			ht_night_params.pk=2
+			ht_night_params.humidity_value=humidity
+			ht_night_params.buffer_value=5
+			ht_night_params.temp_value=int(fahrenheit)
+			ht_night_params.start_time=datetime.now().time()
+			ht_night_params.end_time=datetime.now().time()
+			ht_night_params.save()
+		timenow = datetime.now().time()
+		if timenow > ht_night_params.start_time and timenow < ht_night_params.end_time:
+			ht_params = ClimateValues.objects.get(pk=2)
+		else:
+			ht_params = ClimateValues.objects.get(pk=1)
+
 		humidity_positive = ht_params.humidity_value+ht_params.buffer_value
 		humidity_nagitive = ht_params.humidity_value-ht_params.buffer_value
 		temp_params = ht_params.temp_value+ht_params.buffer_value
@@ -264,7 +276,7 @@ def climate_logs():
 			continue
 
 def start():
-	triggers = CronTrigger(second='*/5')
+	triggers = CronTrigger(second='*/10')
 	triggers_log = CronTrigger(minute='*/15')
 	scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
 	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
@@ -307,7 +319,7 @@ def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_jo
 	except Exception as e:
 		pass
 	print(how_often)
-	triggers = OrTrigger(CronTrigger(day_of_week=how_often_day, hour=how_often.hour, minute=how_often.minute))
+	triggers = CronTrigger(day_of_week=how_often_day, hour=how_often.hour, minute=how_often.minute)
 	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, misfire_grace_time=None, replace_existing=True)
 	return
 
@@ -315,7 +327,7 @@ def remove_schedule(schedule_job_id,gpio_pin):
 	try:
 		job_list = scheduler.get_jobs()
 		for job in job_list:
-			if job.id == schedule_job_id:
+			if job.id.startswith('update_schedule_job_id'):
 				job.pause()
 				relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
 				relay_status.schedule_status=False
@@ -324,11 +336,12 @@ def remove_schedule(schedule_job_id,gpio_pin):
 				job.remove()
 	except Exception as e:
 		pass
-	delete_schedule = Schedule.objects.get(gpio_pin=gpio_pin)
+	delete_schedule = Schedule.objects.filter(gpio_pin=gpio_pin)
 	delete_schedule.delete()
 	return
 
 def schedule_display_inputs(display,gpio_pin):
+	count=0
 	for d in display:
 		print(d)
 		duration_hours = d[1]
@@ -340,15 +353,19 @@ def schedule_display_inputs(display,gpio_pin):
 		else:
 			duration_display = f'For {duration_hours} Hours {duration_minutes} Minutes'
 		try:
-			set_schedule = Schedule.objects.get(gpio_pin=gpio_pin)
+			schedule_job_id = f'update_schedule_job_id_{gpio_pin}_{str(count)}'
+			set_schedule = Schedule.objects.get(job_id=schedule_job_id)
 			set_schedule.duration=duration_display
 			set_schedule.schedule_interval=d[0]
 			set_schedule.gpio_pin=gpio_pin
+			set_schedule.job_id=schedule_job_id
 			set_schedule.save()
 		except Exception as e:
 			set_schedule = Schedule()
 			set_schedule.duration=duration_display
 			set_schedule.schedule_interval=d[0]
 			set_schedule.gpio_pin=gpio_pin
+			set_schedule.job_id=schedule_job_id
 			set_schedule.save()
+		count+=1
 	return

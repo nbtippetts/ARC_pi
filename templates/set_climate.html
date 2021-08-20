@@ -1,7 +1,23 @@
 {% load static %}
 
-<form action="{% url 'set_climate' %}" method="POST">
+<form action="{% url 'set_climate' %}" method="POST" class="schedule_form">
 	{% csrf_token %}
-	{{ form }}
-	<input type="submit" value="Submit">
+		<div class="item">
+			{{ form.humidity_value_day }}
+			{{ form.buffer_value_day }}
+			{{ form.temp_value_day }}
+		</div>
+		<div class="item">
+			{{ form.humidity_value_night }}
+			{{ form.buffer_value_night }}
+			{{ form.temp_value_night }}
+		</div>
+		<div class="item">
+			<div class="card-subtitle mb-2 text-muted">Set Night Time Values To Run Between Two Times</div>
+		</div>
+		<div class="item">
+			{{ form.start_time }}
+			{{ form.end_time }}
+		</div>
+	<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 </form>

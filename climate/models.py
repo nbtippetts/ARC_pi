@@ -14,6 +14,8 @@ class ClimateValues(models.Model):
 	humidity_value = models.IntegerField(default=0)
 	buffer_value = models.IntegerField(default=0)
 	temp_value = models.IntegerField(default=0)
+	start_time = models.TimeField(blank=True, null=True)
+	end_time = models.TimeField(blank=True, null=True)
 	created_at = models.DateTimeField(default=timezone.now)
 
 class Exhaust(models.Model):

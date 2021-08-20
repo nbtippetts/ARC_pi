@@ -7,11 +7,22 @@ on_off_gpio = (
 	(True, 'Start'),
 	(False, 'Stop'),
 )
+class TimeInput(forms.TimeInput):
+	input_type = 'time'
 
 class ClimateValuesForm(forms.Form):
-	humidity_value = forms.DecimalField(max_digits=6, decimal_places=2)
-	buffer_value = forms.DecimalField(max_digits=6, decimal_places=2)
-	temp_value = forms.DecimalField(max_digits=6, decimal_places=2)
+	humidity_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Humidity'}))
+	buffer_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Buffer'}))
+	temp_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Temperature'}))
+
+	humidity_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Humidity'}))
+	buffer_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Buffer'}))
+	temp_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Temperature'}))
+	start_time = forms.TimeField(widget=TimeInput)
+	end_time = forms.TimeField(widget=TimeInput)
+	def clean(self):
+		cleaned_data = super().clean()
+
 	class Meta:
 		model = ClimateValues
 

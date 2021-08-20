@@ -6,6 +6,7 @@ class Schedule(models.Model):
 	duration=models.TextField(default='')
 	schedule_interval = models.TextField(default='')
 	gpio_pin = models.IntegerField(default=0)
+	job_id = models.TextField(default='')
 
 class ScheduleLog(models.Model):
 	start = models.TimeField(blank=True, null=True)

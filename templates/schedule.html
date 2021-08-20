@@ -41,9 +41,10 @@
 				<form action="{% url 'update_schedule' %}" method="POST" class="schedule_form">
 					{% csrf_token %}
 						<div class="item">
-							<div>HOW OFTEN</div>
+							<div>RUN TIME</div>
 							<div>HOUR</div>
 							<div>MINUTE</div>
+							<div>HOW OFTEN</div>
 						</div>
 						<div class="item">
 								{{ form.how_often_hour }}

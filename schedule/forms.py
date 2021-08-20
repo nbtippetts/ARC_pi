@@ -2,7 +2,6 @@ from django import forms
 from .models import Schedule,RelayStatus
 from simpleduration import Duration
 from django.core.exceptions import ValidationError
-from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
 from django.utils.translation import ugettext_lazy as _
 from schedule.timer_inputs import timer_hours, timer_minutes
 
@@ -29,12 +28,6 @@ class TimeInput(forms.TimeInput):
 
 
 class ScheduleForm(forms.Form):
-	# start = forms.TimeField(
-	# 	widget=TimeInput
-	# )
-	# duration_hours = forms.CharField(label='Duration',widget=forms.TextInput(attrs={'placeholder': 'Hours'}),required=False)
-	# duration_minutes = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Minutes'}),required=False)
-	# duration_seconds = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Seconds'}),required=False)
 	how_often_hour = forms.TimeField(label='Run Times', widget=TimeInput)
 	duration_hours = forms.ChoiceField(choices=duration_hour)
 	duration_minutes = forms.ChoiceField(choices=duration_minute)
@@ -60,15 +53,6 @@ class ScheduleForm(forms.Form):
 	)
 	def clean(self):
 		cleaned_data = super().clean()
-		# if self.cleaned_data['duration_hours'] == '':
-		# 	duration_hours = '0'
-		# else:
-		# 	duration_hours = self.cleaned_data['duration_hours']
-		# if self.cleaned_data['duration_minutes'] == '':
-		# 	duration_minutes = '0'
-		# else:
-		# 	duration_minutes = self.cleaned_data['duration_minutes']
-
 		self.cleaned_data['how_often']=[]
 		self.cleaned_data['how_often_display']=[]
 		run_time_list = [
@@ -76,9 +60,6 @@ class ScheduleForm(forms.Form):
 			{'schedule_key': [self.cleaned_data['how_often_hour1'],self.cleaned_data['duration_hours1'],self.cleaned_data['duration_minutes1'],self.cleaned_data['how_often_day1']]},
 			{'schedule_key': [self.cleaned_data['how_often_hour2'],self.cleaned_data['duration_hours2'],self.cleaned_data['duration_minutes2'],self.cleaned_data['how_often_day2']]},
 			{'schedule_key': [self.cleaned_data['how_often_hour3'],self.cleaned_data['duration_hours3'],self.cleaned_data['duration_minutes3'],self.cleaned_data['how_often_day3']]},
-			# self.cleaned_data['how_often_hour1'],
-			# self.cleaned_data['how_often_hour2'],
-			# self.cleaned_data['how_often_hour3'],
 		]
 		for run_time in run_time_list:
 			print(run_time['schedule_key'][0])

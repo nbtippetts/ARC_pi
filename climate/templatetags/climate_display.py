@@ -5,21 +5,29 @@ from ..forms import ClimateValuesForm, ExhaustForm
 from ..hum_temp import get_humidity_temperature
 from schedule.models import RelayStatus, Schedule
 from schedule.forms import RelayStatusForm
+from datetime import datetime
 
 @register.inclusion_tag('current_humidity.html')
 def show_humidity():
 	current_humidity, current_temp = get_humidity_temperature()
 	try:
-		current_values = ClimateValues.objects.get(pk=1)
-		return {'humidity': current_humidity,'temp': current_temp, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
+		check_current_values = ClimateValues.objects.get(pk=2)
 	except Exception as e:
 		h = ClimateValues(
+			pk=2,
 			humidity_value=current_humidity,
-			temp_value=current_temp
+			temp_value=current_temp,
+			start_time=datetime.now().time(),
+			end_time=datetime.now().time(),
 		)
 		h.save()
+	timenow = datetime.now().time()
+	if timenow > check_current_values.start_time and timenow < check_current_values.end_time:
+		current_values = ClimateValues.objects.get(pk=2)
+	else:
 		current_values = ClimateValues.objects.get(pk=1)
-		return {'humidity': current_humidity,'temp': current_temp, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
+
+	return {'humidity': current_humidity,'temp': current_temp, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
 
 @register.inclusion_tag('current_temp.html')
 def show_temp():
@@ -49,18 +57,18 @@ def climate_tag():
 
 @register.inclusion_tag('current_lighting_schedule.html')
 def current_lighting_schedule():
-	try:
-		schedule_param = Schedule.objects.get(gpio_pin=14)
-		return {'schedule_param': schedule_param}
-	except Exception as e:
-		return {'schedule_param': 'None'}
+	schedule_param = Schedule.objects.filter(gpio_pin=14)
+	return {'schedule_param': schedule_param}
+	# try:
+	# except Exception as e:
+	# 	return {'schedule_param': []}
 @register.inclusion_tag('current_watering_schedule.html')
 def current_watering_schedule():
-	try:
-		schedule_param = Schedule.objects.get(gpio_pin=15)
-		return {'schedule_param': schedule_param}
-	except Exception as e:
-		return {'schedule_param': 'None'}
+	schedule_param = Schedule.objects.filter(gpio_pin=15)
+	return {'schedule_param': schedule_param}
+	# try:
+	# except Exception as e:
+	# 	return {'schedule_param': []}
 
 @register.inclusion_tag('current_hum_temp.html')
 def current_hum_temp():

@@ -7,14 +7,14 @@ from ..forms import RemoveScheduleForm, RelayStatusForm
 
 @register.inclusion_tag('current_lighting_schedule.html')
 def current_lighting_schedule():
-	schedule_param = Schedule.objects.get(gpio_pin=14)
+	schedule_param = Schedule.objects.filter(gpio_pin=14)
 	return {'schedule_param': schedule_param}
 	# try:
 	# except Exception as e:
 	# 	return {'schedule_param': []}
 @register.inclusion_tag('current_watering_schedule.html')
 def current_watering_schedule():
-	schedule_param = Schedule.objects.get(gpio_pin=15)
+	schedule_param = Schedule.objects.filter(gpio_pin=15)
 	return {'schedule_param': schedule_param}
 	# try:
 	# except Exception as e:

@@ -16,8 +16,8 @@ def register(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('/schedule')
+            login(request)
+            return redirect('/login')
     return render(request, 'register.html', {'form': form})
 
 def login(request):
