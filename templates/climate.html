@@ -33,16 +33,21 @@
 			</div>
 		</div>
 		<div class="main-cards">
-			<div class="card">{% current_hum_temp %}
+			<div class="card">
+				<div class="main_card__icon">CLIMATE</div>
+				{% current_hum_temp %}
 				<div id="chart_content" class="card-body" style="padding-top: 0px;">
 					{% climate_tag %}
 				</div>
 			</div>
 			<div class="card">
-				<div class="main_card__icon">CLIMATE</div>
+				<div class="main_card__icon">CLIMATE PARAMETERS</div>
 					{% set_climate_form %}
 				</div>
-			<div class="card">{% log_data %}</div>
+			<div class="card">
+				<div class="main_card__icon">CLIMATE LOG</div>
+				{% log_data %}
+			</div>
 		</div>
 	</main>
 </div>

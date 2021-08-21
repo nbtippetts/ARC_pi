@@ -72,24 +72,14 @@ def current_watering_schedule():
 
 @register.inclusion_tag('current_hum_temp.html')
 def current_hum_temp():
-	try:
-		current_values = ClimateValues.objects.get(pk=1)
-	except Exception as e:
-		h = ClimateValues(
-			humidity_value=0.0,
-			temp_value=0.0
-		)
-		h.save()
-		current_values = ClimateValues.objects.get(pk=1)
-		pass
+	current_humidity, current_temp = get_humidity_temperature()
 	return {
-		'humidity_value':current_values.humidity_value,
-		'buffer_value':current_values.buffer_value,
-		'temp_value':current_values.temp_value,}
+		'humidity_value':current_humidity,
+		'temp_value':current_temp,}
 
 @register.inclusion_tag('log_data.html')
 def log_data():
-	log_data = ClimateLogs.objects.all().order_by('-created_at')[:25]
+	log_data = ClimateLogs.objects.all().order_by('-created_at')[:12]
 	return {
 		'table_log_data': log_data,}
 
