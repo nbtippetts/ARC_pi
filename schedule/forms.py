@@ -88,6 +88,7 @@ class ScheduleForm(forms.Form):
 
 class RemoveScheduleForm(forms.Form):
 	gpio_pin = forms.ChoiceField(
+		label=False,
 		choices=select_gpio_pin
 	)
 class RelayStatusForm(forms.Form):

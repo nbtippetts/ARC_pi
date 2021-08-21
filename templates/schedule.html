@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load schedule_display %}
 {% load climate_display %}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 {% load static %}
 {% block content %}
 <link href="{% static 'css/schedule.css' %}" rel="stylesheet">
@@ -76,7 +73,7 @@
 					{{ form.gpio_pin }}
 					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 				</form>
-				<div class="main_card__icon">DELERE SCHEDULE</div>
+				<div class="main_card__icon">DELETE SCHEDULE</div>
 				{% remove_schedule %}
 			</div>
 			<div class="card">
