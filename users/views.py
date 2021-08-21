@@ -13,21 +13,17 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            login(request)
             return redirect('/login')
     return render(request, 'register.html', {'form': form})
 
-def login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            return redirect('schedule')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+# def login(request):
+#     if request.method == 'POST':
+#         form = AuthenticationForm(data=request.POST)
+#         if form.is_valid():
+#             return redirect('schedule')
+#     else:
+#         form = AuthenticationForm()
+#     return render(request, 'login.html', {'form': form})
 
 def info(request):
     return render(request, 'info.html')
