@@ -34,11 +34,11 @@ def update_schedule(request):
 			for schedule_input in schedule_input_list:
 				print(schedule_input)
 
-				how_often = schedule_input[0]
-				how_often_day = schedule_input[3]
-				schedule_duration = schedule_input[4]
+				how_often = schedule_input['schedule_key'][0]
+				how_often_day = schedule_input['schedule_key'][3]
+				schedule_duration = schedule_input['schedule_key'][4]
 
-				schedule_job_id = f'update_schedule_job_id_{gpio_pin}_{str(count)}'
+				schedule_job_id = schedule_input['job_id']
 				start_schedule.add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_job_id)
 				count+=1
 			context = {

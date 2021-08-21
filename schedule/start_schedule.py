@@ -353,7 +353,7 @@ def schedule_display_inputs(display,gpio_pin):
 		else:
 			duration_display = f'For {duration_hours} Hours {duration_minutes} Minutes'
 		try:
-			schedule_job_id = f'update_schedule_job_id_{gpio_pin}_{str(count)}'
+			schedule_job_id = d[3]
 			set_schedule = Schedule.objects.get(job_id=schedule_job_id)
 			set_schedule.duration=duration_display
 			set_schedule.schedule_interval=d[0]

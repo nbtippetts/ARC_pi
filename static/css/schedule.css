@@ -10,6 +10,7 @@
     flex-direction: column;
     grid-gap: 20px;
     margin: 20px;
+    width: inherit;
   }
 
 .schedule_form .item {

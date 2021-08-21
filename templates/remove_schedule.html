@@ -1,12 +1,7 @@
 {% load static %}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{{ form.media }}
-{% load crispy_forms_tags %}
 
-<form action="{% url 'remove_schedule_view' %}" method="POST">
+<form action="{% url 'remove_schedule_view' %}" method="POST" class="schedule_form">
 	{% csrf_token %}
-	{% bootstrap_form form %}
-	<button type="submit" class="btn btn-outline-dark btn-sm" value="Submit">Delete Schedule</button>
+	{{ form }}
+	<button type="submit" class="arc_buttons" value="Submit">Delete</button>
 </form>

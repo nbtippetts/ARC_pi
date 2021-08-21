@@ -55,24 +55,26 @@ class ScheduleForm(forms.Form):
 		cleaned_data = super().clean()
 		self.cleaned_data['how_often']=[]
 		self.cleaned_data['how_often_display']=[]
+		gpio_pin=self.cleaned_data['gpio_pin']
+		schedule_job_id = f'update_schedule_job_id_{gpio_pin}'
 		run_time_list = [
-			{'schedule_key': [self.cleaned_data['how_often_hour'],self.cleaned_data['duration_hours'],self.cleaned_data['duration_minutes'],self.cleaned_data['how_often_day']]},
-			{'schedule_key': [self.cleaned_data['how_often_hour1'],self.cleaned_data['duration_hours1'],self.cleaned_data['duration_minutes1'],self.cleaned_data['how_often_day1']]},
-			{'schedule_key': [self.cleaned_data['how_often_hour2'],self.cleaned_data['duration_hours2'],self.cleaned_data['duration_minutes2'],self.cleaned_data['how_often_day2']]},
-			{'schedule_key': [self.cleaned_data['how_often_hour3'],self.cleaned_data['duration_hours3'],self.cleaned_data['duration_minutes3'],self.cleaned_data['how_often_day3']]},
+			{'job_id':f'{schedule_job_id}_0','schedule_key': [self.cleaned_data['how_often_hour'],self.cleaned_data['duration_hours'],self.cleaned_data['duration_minutes'],self.cleaned_data['how_often_day']]},
+			{'job_id':f'{schedule_job_id}_1','schedule_key': [self.cleaned_data['how_often_hour1'],self.cleaned_data['duration_hours1'],self.cleaned_data['duration_minutes1'],self.cleaned_data['how_often_day1']]},
+			{'job_id':f'{schedule_job_id}_2','schedule_key': [self.cleaned_data['how_often_hour2'],self.cleaned_data['duration_hours2'],self.cleaned_data['duration_minutes2'],self.cleaned_data['how_often_day2']]},
+			{'job_id':f'{schedule_job_id}_3','schedule_key': [self.cleaned_data['how_often_hour3'],self.cleaned_data['duration_hours3'],self.cleaned_data['duration_minutes3'],self.cleaned_data['how_often_day3']]},
 		]
 		for run_time in run_time_list:
 			print(run_time['schedule_key'][0])
 			if run_time['schedule_key'][0] != None:
-				self.cleaned_data['how_often'].append(run_time['schedule_key'])
-				self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2]))
+				self.cleaned_data['how_often'].append(run_time)
+				self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2],run_time['job_id']))
 		print(self.cleaned_data['how_often'])
 		for often in self.cleaned_data['how_often']:
-			duration_hours = often[1]
-			duration_minutes = often[2]
+			duration_hours = often['schedule_key'][1]
+			duration_minutes = often['schedule_key'][2]
 			duration=Duration(f"{duration_hours} hour {duration_minutes} minute")
 			duration=duration.timedelta()
-			often.append(duration)
+			often['schedule_key'].append(duration)
 		print(self.cleaned_data['how_often'])
 		# how_often = self.cleaned_data['how_often']
 		# if how_often.seconds == 0:
