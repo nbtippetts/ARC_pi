@@ -1,11 +1,4 @@
-@charset "utf-8";
-	.circle
-{
-	background : #CCC5B9;
-	background : rgba(204, 197, 185, 1);
-	width : 390px;
-	height : 390px;
-}
+
 .line
 {
 	border-style : Solid;
@@ -64,10 +57,134 @@
 	height : 877px;
 	filter: alpha(opacity=65) progid:DXImageTransform.Microsoft.Alpha(opacity=65) ;
 }
+.grid__wrapper {
+	width: 100%;
+	height: auto;
+}
+.grid-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.nav_line_container {
+	display: flex;
+	justify-content: space-between;
+	background-color: #252422;
+    color: #EDECEB;
+	font-family : Helvetica;
+	font-size: 14px;
+    letter-spacing: 3.2px;
+	text-transform : uppercase;
+}
+.nav_line_container .nav_line {
+    border-bottom: Solid;
+    border-color: #EDECEB;
+    border-color: rgba(237, 236, 235, 1);
+    border-width: 1px;
+    width: 100%;
+    height: 0px;
+    align-self: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
 .header-background
-{
-	background : #252422;
-	background : rgba(37, 36, 34, 1);
-	width : 1669px;
-	height : 550px;
+{	
+	background-image: url("/static/img/arc-logo-white-06.png");
+	height: 200px;
+	padding-top: 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-color: linear-gradient(90deg,#252422,50%,#252422,50%);
+	background-color: rgba(37, 36, 34, 1);
+}
+.grid-container .body_background 
+{	
+	background-image: url("/static/img/arc-landing-image.png");
+	height: 50%;
+	padding-top: 25px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	opacity : 0.65;
+	display: flex;
+	align-items: center;
+}
+
+
+.dot-container {
+	width: 50%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+	padding-right: 20px;
+}
+.dot {
+	height: 200px;
+    width: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    background-color: #CCC5B9;
+    border-radius: 50%;
+}
+.dot__text {
+	font-family: Monaco;
+	font-size: 22px;
+	letter-spacing: 4.4px;
+	color: #231F20;
+	color: rgb(35, 31, 32);
+}
+
+.body__text {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	margin-right: 10px;
+	font-family: Monaco;
+	font-size: 18px;
+	letter-spacing: 4.4px;
+	line-height: 2;
+	color: #231F20;
+	color: rgb(35, 31, 32);
+	word-break: break-all;
+}
+
+.body__text .landing_page_steps {
+	line-height: 1;
+	padding-bottom: 25px;
+}
+
+.button__container {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 765px) {
+	.grid-container .body_background {	
+		background-image: url("/static/img/arc-landing-image.png");
+		height: 50%;
+		padding-top: 25px;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		opacity : 0.65;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.dot-container {
+		width: 100%;
+		height: auto;
+		display: flex;
+		justify-content: center;
+	}
+	.body__text .landing_page_steps {
+		line-height: 1;
+		padding-top: 25px;
+		width: 50%;
+		align-self: center;
+	}
+
 }

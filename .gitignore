@@ -1,3 +1,5 @@
+file_/*
+file:/*
 staticfiles
 arc/celerybeat.pid
 dump.rdb

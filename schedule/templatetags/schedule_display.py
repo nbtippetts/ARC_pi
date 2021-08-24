@@ -22,7 +22,7 @@ def current_watering_schedule():
 
 @register.inclusion_tag('gpio_14_schedule_log.html')
 def show_gpio_14_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=14).order_by('-id')[:10]
+	latest_schedule = ScheduleLog.objects.filter(gpio_pin=14).order_by('-id')[:5]
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
 	else:
@@ -36,7 +36,7 @@ def show_gpio_14_schedule_log():
 
 @register.inclusion_tag('gpio_15_schedule_log.html')
 def show_gpio_15_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=15).order_by('-id')[:10]
+	latest_schedule = ScheduleLog.objects.filter(gpio_pin=15).order_by('-id')[:5]
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
 	else:
