@@ -37,6 +37,7 @@
 				<div class="main_card__icon">SCHEDULE</div>
 				<form action="{% url 'update_schedule' %}" method="POST" class="schedule_form">
 					{% csrf_token %}
+					{{ form.gpio_pin }}
 						<div class="item">
 							<div>RUN TIME</div>
 							<div>HOUR</div>
@@ -70,7 +71,6 @@
 					{% for error in form.non_field_errors %}
 					<p class="help is-danger">{{ error }}</p>
 					{% endfor %}
-					{{ form.gpio_pin }}
 					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 				</form>
 				<div class="main_card__icon">DELETE SCHEDULE</div>
