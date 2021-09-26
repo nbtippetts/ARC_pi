@@ -38,7 +38,7 @@ def show_temp():
 def climate_tag():
 	# current_humidity, current_temp = get_humidity_temperature()
 	form = ClimateValuesForm()
-	data = ClimateLogs.objects.all().order_by('-created_at')[:100]
+	data = ClimateLogs.objects.all().order_by('-created_at')[:50]
 	try:
 		current_values = ClimateValues.objects.get(pk=1)
 	except Exception as e:
