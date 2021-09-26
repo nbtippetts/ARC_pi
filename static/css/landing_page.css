@@ -72,9 +72,12 @@
 	background-color: #252422;
     color: #EDECEB;
 	font-family : Helvetica;
-	font-size: 14px;
+	font-size: 40px;
     letter-spacing: 3.2px;
 	text-transform : uppercase;
+	padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
 }
 .nav_line_container .nav_line {
     border-bottom: Solid;
@@ -87,41 +90,42 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+.nav_line_login {
+	text-decoration: none;
+    color: #EDECEB;
+}
 .header-background
 {	
-	background-image: url("/static/img/arc-logo-white-06.png");
-	height: 200px;
-	padding-top: 100px;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
+	display: flex;
+    justify-content: center;
 	background-color: linear-gradient(90deg,#252422,50%,#252422,50%);
 	background-color: rgba(37, 36, 34, 1);
 }
+
 .grid-container .body_background 
 {	
 	background-image: url("/static/img/arc-landing-image.png");
-	height: 50%;
+	height: auto;
 	padding-top: 25px;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
 	opacity : 0.65;
 	display: flex;
+	justify-content: center;
 	align-items: center;
 }
 
 
 .dot-container {
-	width: 50%;
     height: auto;
     display: flex;
     justify-content: flex-end;
 	padding-right: 20px;
 }
 .dot {
-	height: 200px;
-    width: 200px;
+	height: 400px;
+    width: 400px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -130,7 +134,7 @@
 }
 .dot__text {
 	font-family: Monaco;
-	font-size: 22px;
+	font-size: 50px;
 	letter-spacing: 4.4px;
 	color: #231F20;
 	color: rgb(35, 31, 32);

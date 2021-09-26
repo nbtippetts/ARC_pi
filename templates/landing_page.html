@@ -7,10 +7,10 @@
     <div class="nav_line_container">    
         <div class="nav_line_welcome">WELCOME</div>
         <div class="nav_line"></div>
-        <div class="nav_line_login">LOGIN</div>
+        <a href="{% url 'login' %}" class="nav_line_login">LOGIN</a>
     </div>
     <div class="header-background">
-        
+        <img src="{% static 'img/arc-logo-white-06.png' %}" alt="" height="1000" class="responsive">
     </div>
 </div>
 <div class="grid-container">
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="button__container">
-        <button type="submit" id="register_btn" class="arc_buttons">SIGN UP</button>
+        <a href="{% url 'register' %}"><button id="register_btn" class="arc_buttons">SIGN UP</button></a>
     </div>
 </div>
 </div>
