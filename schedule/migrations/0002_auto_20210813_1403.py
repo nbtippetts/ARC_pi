@@ -15,6 +15,8 @@ class Migration(migrations.Migration):
         relay_status.save()
         relay_status = RelayStatus(pk=2,schedule_status='False',button_status='False',gpio_pin=15)
         relay_status.save()
+        relay_status = RelayStatus(pk=3,schedule_status='False',button_status='False',gpio_pin=18)
+        relay_status.save()
 
     operations = [
         migrations.RunPython(insert_data)

@@ -1,9 +1,9 @@
 from django import template
 register = template.Library()
-from ..models import Schedule, ScheduleLog, RelayStatus
+from ..models import Schedule, ScheduleLog, RelayStatus, ScheduleDateLog
 from climate.models import Exhaust
 from climate.forms import ExhaustForm
-from ..forms import RemoveScheduleForm, RelayStatusForm
+from ..forms import RemoveScheduleForm, RelayStatusForm, GetLogsForm
 
 @register.inclusion_tag('current_lighting_schedule.html')
 def current_lighting_schedule():
@@ -22,7 +22,17 @@ def current_watering_schedule():
 
 @register.inclusion_tag('gpio_14_schedule_log.html')
 def show_gpio_14_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=14).order_by('-id')[:5]
+	try:
+		get_dates = ScheduleDateLog.objects.get(gpio_pin=14)
+		print(get_dates.start_date)
+		print(get_dates.end_date)
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=14,
+					finish_date__gte=get_dates.start_date,
+					finish_date__lte=get_dates.end_date
+				)
+	except ScheduleDateLog.DoesNotExist:
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=14).order_by('-id')[:5]
+		pass
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
 	else:
@@ -36,7 +46,17 @@ def show_gpio_14_schedule_log():
 
 @register.inclusion_tag('gpio_15_schedule_log.html')
 def show_gpio_15_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=15).order_by('-id')[:5]
+	try:
+		get_dates = ScheduleDateLog.objects.get(gpio_pin=15)
+		print(get_dates.start_date)
+		print(get_dates.end_date)
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=15,
+					finish_date__gte=get_dates.start_date,
+					finish_date__lte=get_dates.end_date
+				)
+	except ScheduleDateLog.DoesNotExist:
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=15).order_by('-id')[:5]
+		pass
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
 	else:
@@ -47,6 +67,34 @@ def show_gpio_15_schedule_log():
 		}
 		return{'latest_schedule': no_data}
 
+@register.inclusion_tag('gpio_18_schedule_log.html')
+def show_gpio_18_schedule_log():
+	try:
+		get_dates = ScheduleDateLog.objects.get(gpio_pin=18)
+		print(get_dates.start_date)
+		print(get_dates.end_date)
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=18,
+					finish_date__gte=get_dates.start_date,
+					finish_date__lte=get_dates.end_date
+				)
+	except ScheduleDateLog.DoesNotExist:
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=18).order_by('-id')[:5]
+		pass
+	if latest_schedule.exists():
+		return {'latest_schedule': latest_schedule}
+	else:
+		no_data = {
+			'start': '00:00:00',
+			'duration': '00:00:00',
+			'finish_date': '00:00:00'
+		}
+		return{'latest_schedule': no_data}
+
+
+@register.inclusion_tag('log_form.html')
+def select_logs():
+	form = GetLogsForm()
+	return {'daterange_form': form}
 
 @register.inclusion_tag('remove_schedule.html')
 def remove_schedule():
@@ -139,32 +187,32 @@ def gpio_15_state_function():
 		pin_state = 0
 	return {'gpio_15_state':pin_state}
 
-# @register.inclusion_tag('gpio_17.html')
-# def gpio_17_state_function():
-# 	relay_state = Exhaust.objects.get(pk=1)
-# 	pin_state = 0
-# 	auto_pin_state = 0
-# 	if relay_state.status == 'True':
-# 		pin_state = 1
-# 	else:
-# 		pin_state = 0
-# 	if relay_state.automation_status == 'True':
-# 		auto_pin_state = 1
-# 	else:
-# 		auto_pin_state = 0
-# 	return {'gpio_17_state':pin_state,'gpio_17_auto_state':auto_pin_state}
+@register.inclusion_tag('gpio_17.html')
+def gpio_17_state_function():
+	relay_state = Exhaust.objects.get(pk=1)
+	pin_state = 0
+	auto_pin_state = 0
+	if relay_state.status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	if relay_state.automation_status == 'True':
+		auto_pin_state = 1
+	else:
+		auto_pin_state = 0
+	return {'gpio_17_state':pin_state,'gpio_17_auto_state':auto_pin_state}
 
-# @register.inclusion_tag('gpio_18.html')
-# def gpio_18_state_function():
-# 	relay_state = Exhaust.objects.get(pk=2)
-# 	pin_state = 0
-# 	auto_pin_state = 0
-# 	if relay_state.status == 'True':
-# 		pin_state = 1
-# 	else:
-# 		pin_state = 0
-# 	if relay_state.automation_status == 'True':
-# 		auto_pin_state = 1
-# 	else:
-# 		auto_pin_state = 0
-# 	return {'gpio_18_state':pin_state,'gpio_18_auto_state':auto_pin_state}
+@register.inclusion_tag('gpio_18.html')
+def gpio_18_state_function():
+	relay_state = Exhaust.objects.get(pk=2)
+	pin_state = 0
+	auto_pin_state = 0
+	if relay_state.status == 'True':
+		pin_state = 1
+	else:
+		pin_state = 0
+	if relay_state.automation_status == 'True':
+		auto_pin_state = 1
+	else:
+		auto_pin_state = 0
+	return {'gpio_18_state':pin_state,'gpio_18_auto_state':auto_pin_state}

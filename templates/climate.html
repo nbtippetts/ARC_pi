@@ -9,27 +9,98 @@
 		<div class="main-overview">
 			<div class="overviewcard">
 				<div class="overviewcard__icon">LIGHTING</div>
+				{% if gpio_14_state == 1 %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+							background: #EDECEB;
+							border: 2px solid #252422;
+							color:#252422; width: fit-content;">ON</span>
+				{% else %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+							background: #252422;
+							border: 2px solid #252422;
+							color: #EDECEB; width: fit-content;">OFF</span>
+				{% endif %}
 				<div class="overviewcard__info">
 					{% current_lighting_schedule %}
-					{% gpio_14_state %}</div>
+				</div>
+				{% gpio_14_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">WATERING</div>
+				{% if gpio_15_state == 1 %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+						    background: #EDECEB;
+						    border: 2px solid #252422;
+						    color:#252422; width: fit-content;">ON</span>
+				{% else %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+						    background: #252422;
+						    border: 2px solid #252422;
+						    color: #EDECEB; width: fit-content;">OFF</span>
+				{% endif %}
 				<div class="overviewcard__info">
 					{% current_watering_schedule %}
-					{% gpio_15_state %}</div>
+				</div>
+				{% gpio_15_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">CLIMATE</div>
+				{% if gpio_17_state == 1 %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+										    background: #EDECEB;
+										    border: 2px solid #252422;
+										    color:#252422; width: fit-content;">ON</span>
+				{% else %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+										    background: #252422;
+										    border: 2px solid #252422;
+										    color: #EDECEB; width: fit-content;">OFF</span>
+				{% endif %}
 				<div class="overviewcard__info">
 					{% show_humidity %}
 					{% show_temp %}
-					{% gpio_17_state %}</div>
+				</div>
+				{% gpio_17_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">EXHUAST</div>
+				{% if gpio_18_state == 1 %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+										    background: #EDECEB;
+										    border: 2px solid #252422;
+										    color:#252422; width: fit-content;">ON</span>
+				{% else %}
+				<span class="badge badge-pill" style="border-radius: 40px;
+										    background: #252422;
+										    border: 2px solid #252422;
+										    color: #EDECEB; width: fit-content;">OFF</span>
+				{% endif %}
 				<div class="overviewcard__info">
-					{% gpio_18_state %}</div>
+					<form action="{% url 'update_schedule' %}" method="POST" class="exhaust_form">
+						{% csrf_token %}
+						<div class="item">
+							<div class="exhaust_title">HOW OFTEN</div>
+						</div>
+						<div class="item">
+							{{ form.run_time_input4 }}
+							{{ form.how_often_minute4 }}
+						</div>
+						<div class="item">
+							<div class="exhaust_title">DURATION HOUR</div>
+							<div class="exhaust_title">DURATION MINUTE</div>
+						</div>
+						<div class="item">
+							{{ form.duration_hours4 }}
+							{{ form.duration_minutes4 }}
+						</div>
+						{% for error in form.non_field_errors %}
+						<p class="help is-danger">{{ error }}</p>
+						{% endfor %}
+						<input type="hidden" name="gpio_pin" value="18">
+						<button type="submit" class="exhaust_button" value="Submit">Submit</button>
+					</form>
+				</div>
+				{% gpio_18_state %}
 			</div>
 		</div>
 		<div class="main-cards">
@@ -42,8 +113,8 @@
 			</div>
 			<div class="card">
 				<div class="main_card__icon">CLIMATE PARAMETERS</div>
-					{% set_climate_form %}
-				</div>
+				{% set_climate_form %}
+			</div>
 			<div class="card">
 				<div class="main_card__icon">CLIMATE LOG</div>
 				{% log_data %}

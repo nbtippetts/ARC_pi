@@ -43,4 +43,13 @@ class Migration(migrations.Migration):
                 ('gpio_pin', models.IntegerField(default=0)),
             ],
         ),
+        migrations.CreateModel(
+            name='ScheduleDateLog',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('start_date', models.DateTimeField(default=None)),
+                ('end_date', models.DateTimeField(default=None)),
+                ('gpio_pin', models.IntegerField(default=0)),
+            ],
+        ),
     ]

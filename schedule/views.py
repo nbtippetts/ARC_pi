@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from datetime import datetime, date
-from .models import Schedule, ScheduleLog, RelayStatus
+from .models import Schedule, ScheduleLog, RelayStatus, ScheduleDateLog
 from climate.models import Exhaust
-from .forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm
+from .forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm,GetLogsForm
 from . import start_schedule
 from django.contrib.auth.decorators import login_required
 
@@ -16,31 +16,71 @@ def schedule(request):
 	ScheduleLog.objects.filter(duration=None).delete()
 	# schedule_obj = Schedule.objects.all().order_by('-finish')[:3]
 	context = {
-		'form': form
+		'form': form,
 	}
 	return render(request, 'schedule.html',context)
 
 @login_required
+def select_logs(request):
+	if request.method == 'POST':
+		form = GetLogsForm(request.POST)
+		if form.is_valid():
+			start_log=form.cleaned_data['start_log']
+			end_log=form.cleaned_data['end_log']
+			gpio_pin=form.cleaned_data['gpio_pin']
+			try:
+				date_logs = ScheduleDateLog.objects.get(gpio_pin=int(gpio_pin))
+				date_logs.start_date=start_log
+				date_logs.end_date=end_log
+				date_logs.gpio_pin=gpio_pin
+				date_logs.save()
+			except ScheduleDateLog.DoesNotExist:
+				date_logs=ScheduleDateLog()
+				date_logs.start_date=start_log
+				date_logs.end_date=end_log
+				date_logs.gpio_pin=gpio_pin
+				date_logs.save()
+				pass	
+			context = {
+				'daterange_form':form,
+			}
+			return redirect('/schedule', context)
+	else:
+		form = GetLogsForm()
+
+	context = {
+		'daterange_form': form
+	}
+	return render(request, 'schedule.html',context)
+@login_required
 def update_schedule(request):
 	# If this is a POST request then process the Form data
 	if request.method == 'POST':
+		if request.POST['gpio_pin']=='18':
+			print(request.POST['gpio_pin'])
 		form = ScheduleForm(request.POST)
+		# request.POST['gpio_pin']=form.cleaned_data['gpio_pin']
 		if form.is_valid():
 			schedule_input_list = form.cleaned_data['how_often']
 			schedule_input_display = form.cleaned_data['how_often_display']
 			gpio_pin=form.cleaned_data['gpio_pin']
 			start_schedule.schedule_display_inputs(schedule_input_display,gpio_pin)
-			count=0
 			for schedule_input in schedule_input_list:
 				print(schedule_input)
-
-				how_often = schedule_input['schedule_key'][0]
-				how_often_day = schedule_input['schedule_key'][3]
-				schedule_duration = schedule_input['schedule_key'][4]
+				if gpio_pin == '18':
+					how_often = {}
+					how_often['hour']=schedule_input['schedule_key'][1]
+					how_often['minute']=schedule_input['schedule_key'][2]
+					how_often_day = schedule_input['schedule_key'][3]
+					schedule_duration = schedule_input['schedule_key'][4]
+					start_schedule.remove_schedule('climate_job_id',gpio_pin)
+				else:
+					how_often = schedule_input['schedule_key'][0]
+					how_often_day = schedule_input['schedule_key'][3]
+					schedule_duration = schedule_input['schedule_key'][4]
 
 				schedule_job_id = schedule_input['job_id']
 				start_schedule.add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_job_id)
-				count+=1
 			context = {
 				'form': form
 			}
@@ -152,3 +192,11 @@ def relay_on_off(request):
 		'form': form
 	}
 	return render(request, 'schedule.html',context)
+
+@login_required
+def start_automation(request):
+	if request.method == 'POST':
+		start_schedule.exhaust_automation()
+		return redirect('/schedule')
+	else:
+		return render(request, 'schedule.html')

@@ -6,7 +6,6 @@
 {% load crispy_forms_tags %}
 
 {% if gpio_18_state == 1 %}
-<span class="badge badge-pill" style="background-color: #008744; color: white;">ON</span>
 <form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
 	{% csrf_token %}
 	<input type="hidden" name="18" value="18">
@@ -22,7 +21,6 @@
 </form>
 
 {% else %}
-<span class="badge badge-pill" style="background-color: #d62d20; color: white;">OFF</span>
 <form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
 	{% csrf_token %}
 	<input type="hidden" name="18" value="18">

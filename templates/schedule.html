@@ -9,27 +9,35 @@
 		<div class="main-overview">
 			<div class="overviewcard">
 				<div class="overviewcard__icon">LIGHTING</div>
+				{% gpio_14_state_function %}
 				<div class="overviewcard__info">
-				{% current_lighting_schedule %}
-				{% gpio_14_state %}</div>
+					{% current_lighting_schedule %}
+				</div>
+				{% gpio_14_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">WATERING</div>
+				{% gpio_15_state_function %}
 				<div class="overviewcard__info">
-				{% current_watering_schedule %}
-				{% gpio_15_state %}</div>
+					{% current_watering_schedule %}
+				</div>
+				{% gpio_15_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">CLIMATE</div>
+				{% gpio_17_state_function %}
 				<div class="overviewcard__info">
-				{% show_humidity %}
-				{% show_temp %}
-				{% gpio_17_state %}</div>
+					{% show_humidity %}
+					{% show_temp %}
+				</div>
+				{% gpio_17_state %}
 			</div>
 			<div class="overviewcard">
 				<div class="overviewcard__icon">EXHUAST</div>
+				{% gpio_18_state_function %}
 				<div class="overviewcard__info">
-				{% gpio_18_state %}</div>
+				</div>
+				{% gpio_18_state %}
 			</div>
 		</div>
 		<div class="main-cards">
@@ -38,54 +46,89 @@
 				<form action="{% url 'update_schedule' %}" method="POST" class="schedule_form">
 					{% csrf_token %}
 					{{ form.gpio_pin }}
-						<div class="item">
-							<div>RUN TIME</div>
-							<div>HOUR</div>
-							<div>MINUTE</div>
-							<div>HOW OFTEN</div>
-						</div>
-						<div class="item">
-								{{ form.how_often_hour }}
-								{{ form.duration_hours }}
-								{{ form.duration_minutes }}
-								{{ form.how_often_day }}
-						</div>
-						<div class="item">
-								{{ form.how_often_hour1 }}
-								{{ form.duration_hours1 }}
-								{{ form.duration_minutes1 }}
-								{{ form.how_often_day1 }}
-						</div>
-						<div class="item">
-								{{ form.how_often_hour2 }}
-								{{ form.duration_hours2 }}
-								{{ form.duration_minutes2 }}
-								{{ form.how_often_day2 }}
-						</div>
-						<div class="item">
-								{{ form.how_often_hour3 }}
-								{{ form.duration_hours3 }}
-								{{ form.duration_minutes3 }}
-								{{ form.how_often_day3 }}
-						</div>
+					<div class="item">
+						<div>RUN TIME</div>
+						<div>HOUR</div>
+						<div>MINUTE</div>
+						<div>HOW OFTEN</div>
+					</div>
+					<div class="item">
+						{{ form.run_time_input }}
+						{{ form.duration_hours }}
+						{{ form.duration_minutes }}
+						{{ form.how_often_day }}
+					</div>
+					<div class="item">
+						{{ form.run_time_input1 }}
+						{{ form.duration_hours1 }}
+						{{ form.duration_minutes1 }}
+						{{ form.how_often_day1 }}
+					</div>
+					<div class="item">
+						{{ form.run_time_input2 }}
+						{{ form.duration_hours2 }}
+						{{ form.duration_minutes2 }}
+						{{ form.how_often_day2 }}
+					</div>
+					<div class="item">
+						{{ form.run_time_input3 }}
+						{{ form.duration_hours3 }}
+						{{ form.duration_minutes3 }}
+						{{ form.how_often_day3 }}
+					</div>
 					{% for error in form.non_field_errors %}
 					<p class="help is-danger">{{ error }}</p>
 					{% endfor %}
 					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 				</form>
+				<div class="main_card__icon">EXHUAST SCHEDULE</div>
+				<form action="{% url 'update_schedule' %}" method="POST" class="exhaust_form">
+					{% csrf_token %}
+					<div class="item">
+						<div class="exhaust_title">HOW OFTEN</div>
+					</div>
+					<div class="item">
+						{{ form.run_time_input4 }}
+						{{ form.how_often_minute4 }}
+					</div>
+					<div class="item">
+						<div class="exhaust_title">DURATION HOUR</div>
+						<div class="exhaust_title">DURATION MINUTE</div>
+					</div>
+					<div class="item">
+						{{ form.duration_hours4 }}
+						{{ form.duration_minutes4 }}
+					</div>
+					{% for error in form.non_field_errors %}
+					<p class="help is-danger">{{ error }}</p>
+					{% endfor %}
+					<input type="hidden" name="gpio_pin" value="18">
+					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
+				</form>
+				<form action="{% url 'start_automation' %}" method="POST" class="exhaust_automation_form">
+					{% csrf_token %}
+					<button type="submit" class="arc_buttons" value="Submit">Start Automation</button>
+				</form>
+				
 				<div class="main_card__icon">DELETE SCHEDULE</div>
 				{% remove_schedule %}
+			</div>
+			<div class="card">
+				{% select_logs %}
+				<div class="main_card__icon">LIGHTING LOG</div>
+				{% show_gpio_14_schedule_log %}
 			</div>
 			<div class="card">
 				<div class="main_card__icon">WATERING LOG</div>
 				{% show_gpio_15_schedule_log %}
 			</div>
 			<div class="card">
-				<div class="main_card__icon">LIGHTING LOG</div>
-				{% show_gpio_14_schedule_log %}
+				<div class="main_card__icon">EXHUAST LOG</div>
+				{% show_gpio_18_schedule_log %}
 			</div>
 		</div>
 	</main>
 </div>
+
 
 {% endblock content %}

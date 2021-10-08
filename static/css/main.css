@@ -59,17 +59,26 @@ border-color: rgb(237, 236, 235);
 .arc_buttons{
 	width : 110px;
 	height : 35px;
+	text-align: center;
 	text-transform: uppercase;
-	letter-spacing: 3px;
 	font-family: Helvetica;
-	font-size: 14px;
+	font-size: 12px;
+	letter-spacing:1px;
+	text-shadow:0;
+	font-weight:bold;
+	cursor: pointer;
 	color: #EDECEB;
 	 background-color: #252422;
     background-color: rgba(37, 36, 34, 1);
 	border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 6px;
+	transition: all 0.25s ease;
 }
+  .arc_buttons:hover {
+    color:#252422;
+    background:#EDECEB;
+  }
 
 input{
 	padding: 20px;
@@ -98,7 +107,7 @@ select{
 	border-color: #403D39;
 	border-color: rgba(64, 61, 57, 1);
 	border-width: 1px;
-	height: 46px;
+	height: 40px;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;

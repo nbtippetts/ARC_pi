@@ -16,7 +16,7 @@ click-didyoumean==0.0.3
 click-plugins==1.1.1
 click-repl==0.1.6
 colorzero==1.1
-Django==3.2.4
+Django==3.2.5
 django-bootstrap-datepicker-plus==3.0.5
 django-bootstrap4==2.2.0
 django-chartjs==2.2.1

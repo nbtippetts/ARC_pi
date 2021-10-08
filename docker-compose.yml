@@ -1,9 +1,23 @@
 version: '3'
 
 services:
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER=pi
+      - POSTGRES_PASSWORD=rnautomations
+      - POSTGRES_DB=arc_db
+    networks:  # <-- connect to the bridge
+      - db_network
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
   web:
     restart: always
-    build: .
+    container_name: ARC
+    image: index.docker.io/noahtippetts/arc:latest
     command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && python /arc/manage.py collectstatic --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
@@ -22,6 +36,13 @@ services:
     depends_on:
       - db
 
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - containrrr/watchtower ARC --debug
+    command: --interval 30
+  
   nginx:
     restart: always
     build: ./nginx
@@ -35,21 +56,6 @@ services:
       - web
     networks:  # <-- here
       - nginx_network
-
-  db:
-    restart: always
-    image: postgres
-    environment:
-      - POSTGRES_USER=pi
-      - POSTGRES_PASSWORD=rnautomations
-      - POSTGRES_DB=arc_db
-    networks:  # <-- connect to the bridge
-      - db_network
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
-
-
 networks:  # <-- and here
   web_network:
     driver: bridge

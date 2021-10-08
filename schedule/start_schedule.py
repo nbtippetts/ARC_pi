@@ -32,10 +32,18 @@ def schedule_relay(*args):
 	gpio_pin = args[1]
 	dt = datetime.now()
 	end_dt = dt + args[0]
-	relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
-	relay_status.schedule_status=True
-	relay_status.gpio_pin=gpio_pin
-	relay_status.save()
+	try:
+		relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
+		relay_status.schedule_status=True
+		relay_status.gpio_pin=gpio_pin
+		relay_status.save()
+	except Exception as e:
+		relay_status = RelayStatus()
+		relay_status.schedule_status=True
+		relay_status.button_status=False
+		relay_status.gpio_pin=gpio_pin
+		relay_status.save()
+		pass
 	start_time = datetime.now()
 	break_loop = args[2]
 	print(relay_status.schedule_status)
@@ -275,13 +283,6 @@ def climate_logs():
 			print('Failed to retrieve data from humidity sensor.')
 			continue
 
-def start():
-	triggers = CronTrigger(second='*/10')
-	triggers_log = CronTrigger(minute='*/15')
-	scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
-	scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
-	scheduler.start()
-
 def button_relay_job(status,gpio_pin,button_job_id):
 	if status == 'False':
 		try:
@@ -306,38 +307,70 @@ def button_relay_job(status,gpio_pin,button_job_id):
 	return
 
 def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_job_id):
-	try:
-		job_list = scheduler.get_jobs()
-		for job in job_list:
-			if job.id == schedule_job_id:
-				job.pause()
-				job.remove()
-				relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
-				relay_status.schedule_status=False
-				relay_status.gpio_pin=gpio_pin
-				relay_status.save()
-	except Exception as e:
-		pass
 	print(how_often)
-	triggers = CronTrigger(day_of_week=how_often_day, hour=how_often.hour, minute=how_often.minute)
+	if gpio_pin == '18':
+		triggers = CronTrigger(minute=how_often_day)
+		try:
+			e = Exhaust.objects.get(pk=1)
+			e.status=False
+			e.automation_status=False
+			e.save()
+			e18 = Exhaust.objects.get(pk=2)
+			e18.status=False
+			e18.automation_status=False
+			e18.save()
+			button_relay_job('False',17,'button_relay_job_id_17')
+			button_relay_job('False',18,'button_relay_job_id_18')
+		except Exception as e:
+			pass
+	else:
+		print(type(how_often.hour))
+		triggers = CronTrigger(day_of_week=how_often_day, hour=how_often.hour, minute=how_often.minute)
 	scheduler.add_job(schedule_relay, triggers, args=[schedule_duration,gpio_pin,False], id=schedule_job_id, misfire_grace_time=None, replace_existing=True)
 	return
 
 def remove_schedule(schedule_job_id,gpio_pin):
-	try:
+	try:	
 		job_list = scheduler.get_jobs()
-		for job in job_list:
-			if job.id.startswith('update_schedule_job_id'):
-				job.pause()
-				relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
-				relay_status.schedule_status=False
-				relay_status.gpio_pin=gpio_pin
-				relay_status.save()
-				job.remove()
+		if gpio_pin=='18':
+			for job in job_list:
+				if job.id=='climate_job_id':
+					job.pause()
+					job.remove()
+				else:
+					continue
+		else:
+			for job in job_list:
+				if job.id.startswith(f'update_schedule_job_id_{gpio_pin}'):
+					job.pause()
+					relay_status = RelayStatus.objects.get(gpio_pin=gpio_pin)
+					relay_status.schedule_status=False
+					relay_status.gpio_pin=gpio_pin
+					relay_status.save()
+					job.remove()
+
 	except Exception as e:
 		pass
 	delete_schedule = Schedule.objects.filter(gpio_pin=gpio_pin)
 	delete_schedule.delete()
+	return
+def exhaust_automation():
+	try:	
+		job_list = scheduler.get_jobs()
+		for job in job_list:
+			if job.id=='update_schedule_job_id_18':
+				job.pause()
+				relay_status = RelayStatus.objects.get(gpio_pin=18)
+				relay_status.schedule_status=False
+				relay_status.gpio_pin=18
+				relay_status.save()
+				job.remove()
+			else:
+				continue
+		triggers = CronTrigger(second='*/10')
+		scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+	except Exception as e:
+		pass
 	return
 
 def schedule_display_inputs(display,gpio_pin):
@@ -357,15 +390,39 @@ def schedule_display_inputs(display,gpio_pin):
 			set_schedule = Schedule.objects.get(job_id=schedule_job_id)
 			set_schedule.duration=duration_display
 			set_schedule.schedule_interval=d[0]
-			set_schedule.gpio_pin=gpio_pin
+			set_schedule.gpio_pin=int(gpio_pin)
 			set_schedule.job_id=schedule_job_id
 			set_schedule.save()
 		except Exception as e:
-			set_schedule = Schedule()
-			set_schedule.duration=duration_display
-			set_schedule.schedule_interval=d[0]
-			set_schedule.gpio_pin=gpio_pin
-			set_schedule.job_id=schedule_job_id
-			set_schedule.save()
+			try:
+				# ('04:37:PM', '1', '0', 'update_schedule_job_id_14_0')
+				set_schedule = Schedule()
+				set_schedule.duration=duration_display
+				set_schedule.schedule_interval=d[0]
+				set_schedule.gpio_pin=int(gpio_pin)
+				set_schedule.job_id=schedule_job_id
+				set_schedule.save()
+			except Exception as e:
+				print(e)
+				pass
 		count+=1
 	return
+# ('08:28:PM', '0', '1', 'update_schedule_job_id_18', '*/2')
+# ('08:26:PM', '1', '0', 'update_schedule_job_id_15_0')
+# 'For 1 Hours'
+def start():
+	triggers = CronTrigger(second='*/10')
+	triggers_log = CronTrigger(minute='*/15')
+	job_list = scheduler.get_jobs()
+	flag=0
+	for job in job_list:
+		if job.id=='update_schedule_job_id_18':
+			flag=1
+		else:
+			continue
+	if flag:
+		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
+	else:
+		scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
+	scheduler.start()

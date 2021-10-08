@@ -8,5 +8,7 @@ urlpatterns = [
     path('update_schedule', views.update_schedule, name='update_schedule'),
     path('remove_schedule_view', views.remove_schedule_view, name='remove_schedule_view'),
     path('relay_on_off', views.relay_on_off, name='relay_on_off'),
+    path('start_automation', views.start_automation, name='start_automation'),
+    path('select_logs', views.select_logs, name='select_logs'),
     # path('update_app', views.update_app, name='update_app'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

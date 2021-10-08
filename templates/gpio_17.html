@@ -1,0 +1,14 @@
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load crispy_forms_tags %}
+
+{% if gpio_17_state == 1 %}
+<span class="badge badge-pill" style="background-color: #008744; color: white;">ON</span>
+
+{% else %}
+<span class="badge badge-pill" style="background-color: #d62d20; color: white;">OFF</span>
+
+{% endif %}
