@@ -1,22 +1,9 @@
 version: '3'
 
 services:
-  db:
-    restart: always
-    image: postgres
-    environment:
-      - POSTGRES_USER=pi
-      - POSTGRES_PASSWORD=rnautomations
-      - POSTGRES_DB=arc_db
-    networks:  # <-- connect to the bridge
-      - db_network
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
-
   web:
     restart: always
-    container_name: ARC
+    container_name: arc_web
     image: index.docker.io/noahtippetts/arc:latest
     command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && python /arc/manage.py collectstatic --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
     devices:
@@ -33,16 +20,36 @@ services:
       - web_network
       - nginx_network
       - db_network  # <-- connect to the bridge
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - db
 
   watchtower:
     image: containrrr/watchtower
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - containrrr/watchtower ARC --debug
-    command: --interval 30
-  
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER=pi
+      - POSTGRES_PASSWORD=rnautomations
+      - POSTGRES_DB=arc_db
+    networks:  # <-- connect to the bridge
+      - db_network
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
   nginx:
     restart: always
     build: ./nginx

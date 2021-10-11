@@ -330,7 +330,7 @@ def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_jo
 	return
 
 def remove_schedule(schedule_job_id,gpio_pin):
-	try:	
+	try:
 		job_list = scheduler.get_jobs()
 		if gpio_pin=='18':
 			for job in job_list:
@@ -355,7 +355,7 @@ def remove_schedule(schedule_job_id,gpio_pin):
 	delete_schedule.delete()
 	return
 def exhaust_automation():
-	try:	
+	try:
 		job_list = scheduler.get_jobs()
 		for job in job_list:
 			if job.id=='update_schedule_job_id_18':
@@ -395,7 +395,6 @@ def schedule_display_inputs(display,gpio_pin):
 			set_schedule.save()
 		except Exception as e:
 			try:
-				# ('04:37:PM', '1', '0', 'update_schedule_job_id_14_0')
 				set_schedule = Schedule()
 				set_schedule.duration=duration_display
 				set_schedule.schedule_interval=d[0]
@@ -407,9 +406,7 @@ def schedule_display_inputs(display,gpio_pin):
 				pass
 		count+=1
 	return
-# ('08:28:PM', '0', '1', 'update_schedule_job_id_18', '*/2')
-# ('08:26:PM', '1', '0', 'update_schedule_job_id_15_0')
-# 'For 1 Hours'
+
 def start():
 	triggers = CronTrigger(second='*/10')
 	triggers_log = CronTrigger(minute='*/15')

@@ -50,7 +50,6 @@
 }
 .background-image
 {
-	background-image : url(background-image.png);
 	background-repeat : no-repeat;
 	opacity : 0.65;
 	width : 1647px;
@@ -95,15 +94,15 @@
     color: #EDECEB;
 }
 .header-background
-{	
+{
 	display: flex;
     justify-content: center;
 	background-color: linear-gradient(90deg,#252422,50%,#252422,50%);
 	background-color: rgba(37, 36, 34, 1);
 }
 
-.grid-container .body_background 
-{	
+.grid-container .body_background
+{
 	background-image: url("/static/img/arc-landing-image.png");
 	height: auto;
 	padding-top: 25px;
@@ -166,7 +165,7 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 765px) {
-	.grid-container .body_background {	
+	.grid-container .body_background {
 		background-image: url("/static/img/arc-landing-image.png");
 		height: 50%;
 		padding-top: 25px;
