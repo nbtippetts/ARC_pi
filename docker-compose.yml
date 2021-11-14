@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     restart: always
-    container_name: arc_web
+    # container_name: arc_web
     image: index.docker.io/noahtippetts/arc:latest
     command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && python /arc/manage.py collectstatic --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
     devices:
@@ -25,17 +25,17 @@ services:
     depends_on:
       - db
 
-  watchtower:
-    image: containrrr/watchtower
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_LABEL_ENABLE=true
-      - WATCHTOWER_INCLUDE_RESTARTING=true
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   restart: always
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   environment:
+  #     - WATCHTOWER_CLEANUP=true
+  #     - WATCHTOWER_LABEL_ENABLE=true
+  #     - WATCHTOWER_INCLUDE_RESTARTING=true
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=true"
 
   db:
     restart: always
