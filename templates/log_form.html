@@ -10,7 +10,7 @@
     {{ daterange_form.gpio_pin }}
     <button type="submit" class="arc_buttons" value="Submit">Submit</button>
 </form>
-
+<a href="{% url 'download_schedule_csv' %}">Download Schedule Logs</a>
 
 <script>
     $(function () {
@@ -22,7 +22,6 @@
             format: 'YYYY-MM-DD hh:mmA'
             }
         });
-
     });
 
 </script>

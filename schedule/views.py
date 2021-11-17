@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+import csv
+from django.http import HttpResponse, response
 from datetime import datetime, date
 from .models import Schedule, ScheduleLog, RelayStatus, ScheduleDateLog
 from climate.models import Exhaust
@@ -6,6 +8,18 @@ from .forms import ScheduleForm, RemoveScheduleForm, RelayStatusForm,GetLogsForm
 from . import start_schedule
 from django.contrib.auth.decorators import login_required
 
+@login_required
+def download_schedule_csv(request, *args, **kwargs):
+	response = HttpResponse(content_type='text/csv')
+	cd = f'attachment; filename=schedule_logs.csv'
+	response['Content-Disposition'] = cd
+	fieldnames = ('start','duration','finish_date','start_date','gpio_pin',)
+	data=ScheduleLog.objects.values(*fieldnames)
+	writer = csv.DictWriter(response, fieldnames=fieldnames)
+	writer.writeheader()
+	for row in data:
+		writer.writerow(row)
+	return response
 @login_required
 def schedule(request):
 	start = datetime.now()
@@ -40,7 +54,7 @@ def select_logs(request):
 				date_logs.end_date=end_log
 				date_logs.gpio_pin=gpio_pin
 				date_logs.save()
-				pass	
+				pass
 			context = {
 				'daterange_form':form,
 			}

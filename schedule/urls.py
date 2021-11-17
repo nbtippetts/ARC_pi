@@ -10,5 +10,6 @@ urlpatterns = [
     path('relay_on_off', views.relay_on_off, name='relay_on_off'),
     path('start_automation', views.start_automation, name='start_automation'),
     path('select_logs', views.select_logs, name='select_logs'),
+    path('download_schedule_csv', views.download_schedule_csv, name='download_schedule_csv'),
     # path('update_app', views.update_app, name='update_app'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
