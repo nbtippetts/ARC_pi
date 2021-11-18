@@ -41,7 +41,7 @@ def select_logs(request):
 		if form.is_valid():
 			start_log=form.cleaned_data['start_log']
 			end_log=form.cleaned_data['end_log']
-			gpio_pin=form.cleaned_data['gpio_pin']
+			gpio_pin=form.cleaned_data['gpio_pin_date_range']
 			try:
 				date_logs = ScheduleDateLog.objects.get(gpio_pin=int(gpio_pin))
 				date_logs.start_date=start_log

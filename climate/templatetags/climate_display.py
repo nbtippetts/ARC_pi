@@ -3,8 +3,8 @@ register = template.Library()
 from ..models import ClimateLogs, ClimateValues, Exhaust
 from ..forms import ClimateValuesForm, ExhaustForm
 from ..hum_temp import get_humidity_temperature
-from schedule.models import RelayStatus, Schedule
-from schedule.forms import RelayStatusForm
+from schedule.models import RelayStatus, Schedule, ScheduleDateLog
+from schedule.forms import RelayStatusForm, GetLogsForm
 from datetime import datetime
 
 @register.inclusion_tag('current_humidity.html')
@@ -21,11 +21,25 @@ def show_humidity():
 			end_time=datetime.now().time(),
 		)
 		h.save()
+		check_current_values = ClimateValues.objects.get(pk=2)
+		pass
 	timenow = datetime.now().time()
 	if timenow > check_current_values.start_time and timenow < check_current_values.end_time:
 		current_values = ClimateValues.objects.get(pk=2)
 	else:
-		current_values = ClimateValues.objects.get(pk=1)
+		try:
+			current_values = ClimateValues.objects.get(pk=1)
+		except Exception as e:
+			h = ClimateValues(
+				pk=1,
+				humidity_value=current_humidity,
+				temp_value=current_temp,
+				start_time=datetime.now().time(),
+				end_time=datetime.now().time(),
+			)
+			h.save()
+			current_values = ClimateValues.objects.get(pk=1)
+			pass
 
 	return {'humidity': current_humidity,'temp': current_temp, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
 
@@ -34,11 +48,51 @@ def show_temp():
 	current_temp = show_humidity()
 	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value']}
 
+@register.inclusion_tag('climate_log_form.html')
+def select_climate_logs():
+	form = GetLogsForm()
+	return {'daterange_form': form}
+@register.inclusion_tag('log_data.html')
+def log_data():
+	try:
+		get_dates = ScheduleDateLog.objects.get(gpio_pin=4)
+		print(get_dates.start_date)
+		print(get_dates.end_date)
+		log_data = ClimateLogs.objects.filter(
+					created_at__gte=get_dates.start_date,
+					created_at__lte=get_dates.end_date
+				)
+	except ScheduleDateLog.DoesNotExist:
+		log_data = ClimateLogs.objects.all().order_by('-id')[:5]
+		pass
+	if log_data.exists():
+		return {'table_log_data': log_data,}
+	else:
+		no_data = {
+			'start': '00:00:00',
+			'duration': '00:00:00',
+			'finish_date': '00:00:00'
+		}
+		return {'table_log_data': no_data}
+
+@register.inclusion_tag('set_climate.html')
+def set_climate_form():
+	return climate_tag()
 @register.inclusion_tag('line_chart.html')
 def climate_tag():
 	# current_humidity, current_temp = get_humidity_temperature()
 	form = ClimateValuesForm()
-	data = ClimateLogs.objects.all().order_by('-created_at')[:50]
+	try:
+		get_dates = ScheduleDateLog.objects.get(gpio_pin=4)
+		print(get_dates.start_date)
+		print(get_dates.end_date)
+		log_data = ClimateLogs.objects.filter(
+					created_at__gte=get_dates.start_date,
+					created_at__lte=get_dates.end_date
+				)
+	except ScheduleDateLog.DoesNotExist:
+		log_data = ClimateLogs.objects.all().order_by('-created_at')[:50]
+		pass
 	try:
 		current_values = ClimateValues.objects.get(pk=1)
 	except Exception as e:
@@ -50,7 +104,7 @@ def climate_tag():
 		pass
 	current_values = ClimateValues.objects.get(pk=1)
 	return {
-		'data': data,
+		'data': log_data,
 		'form':form,
 		'humidity_value':current_values.humidity_value,
 		'temp_value':current_values.temp_value,}
@@ -76,16 +130,6 @@ def current_hum_temp():
 	return {
 		'humidity_value':current_humidity,
 		'temp_value':current_temp,}
-
-@register.inclusion_tag('log_data.html')
-def log_data():
-	log_data = ClimateLogs.objects.all().order_by('-created_at')[:12]
-	return {
-		'table_log_data': log_data,}
-
-@register.inclusion_tag('set_climate.html')
-def set_climate_form():
-	return climate_tag()
 
 @register.inclusion_tag('relay_14.html')
 def gpio_14_state():

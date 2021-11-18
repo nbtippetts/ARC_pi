@@ -133,7 +133,7 @@ class GetLogsForm(forms.Form):
 	date_range_picker = forms.CharField(required=False)
 	# start_log=forms.DateTimeField(widget=DateInput())
 	# end_log=forms.DateTimeField(widget=DateInput())
-	gpio_pin = forms.ChoiceField(
+	gpio_pin_date_range = forms.ChoiceField(
 		label=False,
 		choices=select_gpio_pin
 	)

@@ -116,6 +116,7 @@
 				{% set_climate_form %}
 			</div>
 			<div class="card">
+				{% select_climate_logs %}
 				<a href="{% url 'download_climate_csv' %}">Download Climate Logs</a>
 				<div class="main_card__icon">CLIMATE LOG</div>
 				{% log_data %}
