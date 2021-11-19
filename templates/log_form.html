@@ -4,8 +4,9 @@
 {% bootstrap_javascript jquery='full' %}
 {{ form.media }}
 {% load crispy_forms_tags %}
-<form action="select_logs" method="POST" class="mt-3">
+<form action="select_logs" method="POST" class="mt-3" id="select_logs_id">
     {% csrf_token %}
+    <i class="fa fa-calendar" style="display: inline-block;"></i>
     {{ daterange_form.date_range_picker }}
     {{ daterange_form.gpio_pin_date_range }}
     <button type="submit" class="arc_buttons" value="Submit">Submit</button>

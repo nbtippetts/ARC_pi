@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'climate.apps.ClimateConfig',
     'schedule.apps.ScheduleConfig',
     'streamapp.apps.StreamappConfig',
+    'notebook.apps.NotebookConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',

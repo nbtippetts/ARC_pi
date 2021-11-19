@@ -49,4 +49,5 @@ urlpatterns = [
     path('climate/', include('climate.urls')),
     path('schedule/', include('schedule.urls')),
     path('streamapp/', include('streamapp.urls')),
+    path('notebook/', include('notebook.urls')),
 ]
