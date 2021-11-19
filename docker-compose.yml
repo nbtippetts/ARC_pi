@@ -20,22 +20,22 @@ services:
       - web_network
       - nginx_network
       - db_network  # <-- connect to the bridge
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+    # labels:
+    #   - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - db
 
-  watchtower:
-    image: containrrr/watchtower
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_LABEL_ENABLE=true
-      - WATCHTOWER_INCLUDE_RESTARTING=true
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   restart: always
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   environment:
+  #     - WATCHTOWER_CLEANUP=true
+  #     - WATCHTOWER_LABEL_ENABLE=true
+  #     - WATCHTOWER_INCLUDE_RESTARTING=true
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=true"
 
   db:
     restart: always
