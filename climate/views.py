@@ -76,10 +76,11 @@ def set_climate(request):
 			night_values.end_time = form.cleaned_data['end_time']
 			night_values.save()
 			print('Humidity and temperature values saved successfully.')
-			ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
-			context = {'data': ht_obj,'form':form}
-			return render(request, 'climate.html',context)
-
-		ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
-		context = {'data': ht_obj,'form':form}
-		return render(request, 'climate.html',context)
+			# ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
+			context = {'form':form}
+			return redirect('/climate',context)
+	else:
+		form = ClimateValuesForm()
+	# ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
+	context = {'form':form}
+	return render(request, 'climate.html',context)

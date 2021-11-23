@@ -1,10 +1,13 @@
 from django.shortcuts import redirect, render
 from .models import NoteBooks
 from .forms import NoteBookForm
+from datetime import date
 # Create your views here.
 def notebook_view(request):
 	form = NoteBookForm()
-	get_notes = NoteBooks.objects.all()
+	get_notes = NoteBooks.objects.order_by('-publish_date')[:25]
+	for note in get_notes:
+		note.publish_date = note.publish_date.strftime('%B %d, %Y')
 	context = {
 		"notes": get_notes,
 		"form": form
