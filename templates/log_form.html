@@ -12,13 +12,14 @@
     <button type="submit" class="arc_buttons" value="Submit">Submit</button>
 </form>
 <a href="{% url 'download_schedule_csv' %}">Download Schedule Logs</a>
+<a href="{% url 'download_climate_csv' %}">Download Climate Logs</a>
 
 <script>
     $(function () {
         $('#id_date_range_picker').daterangepicker({
             timePicker: true,
             startDate: moment().startOf('hour'),
-            endDate: moment().startOf('hour').add(32, 'hour'),
+            endDate: moment().startOf('hour').add(24, 'hour'),
             locale: {
             format: 'YYYY-MM-DD hh:mmA'
             }

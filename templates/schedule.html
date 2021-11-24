@@ -1,45 +1,11 @@
 {% extends 'base.html' %}
 {% load schedule_display %}
-{% load climate_display %}
 {% load static %}
 {% block content %}
 <link href="{% static 'css/schedule.css' %}" rel="stylesheet">
 <div class="grid-container">
 	<main class="main">
-		<div class="main-overview">
-			<div class="overviewcard">
-				<div class="overviewcard__icon">LIGHTING</div>
-				{% gpio_14_state_function %}
-				<div class="overviewcard__info">
-					{% current_lighting_schedule %}
-				</div>
-				{% gpio_14_state %}
-			</div>
-			<div class="overviewcard">
-				<div class="overviewcard__icon">WATERING</div>
-				{% gpio_15_state_function %}
-				<div class="overviewcard__info">
-					{% current_watering_schedule %}
-				</div>
-				{% gpio_15_state %}
-			</div>
-			<div class="overviewcard">
-				<div class="overviewcard__icon">CLIMATE</div>
-				{% gpio_17_state_function %}
-				<div class="overviewcard__info">
-					{% show_humidity %}
-					{% show_temp %}
-				</div>
-				{% gpio_17_state %}
-			</div>
-			<div class="overviewcard">
-				<div class="overviewcard__icon">EXHUAST</div>
-				{% gpio_18_state_function %}
-				<div class="overviewcard__info">
-				</div>
-				{% gpio_18_state %}
-			</div>
-		</div>
+		{% overview_cards %}
 		<div class="main-cards">
 			<div class="card">
 				<div class="main_card__icon">SCHEDULE</div>
@@ -109,12 +75,11 @@
 					{% csrf_token %}
 					<button type="submit" class="arc_buttons" value="Submit">Start Automation</button>
 				</form>
-				
+
 				<div class="main_card__icon">DELETE SCHEDULE</div>
 				{% remove_schedule %}
 			</div>
 			<div class="card">
-				{% select_logs %}
 				<div class="main_card__icon">LIGHTING LOG</div>
 				{% show_gpio_14_schedule_log %}
 			</div>

@@ -1,0 +1,39 @@
+{% load schedule_display %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<div class="main-overview">
+	<div class="overviewcard">
+		<div class="overviewcard__icon">LIGHTING</div>
+		{% gpio_14_state_function %}
+		<div class="overviewcard__info">
+			{% current_lighting_schedule %}
+		</div>
+		{% gpio_14_state %}
+	</div>
+	<div class="overviewcard">
+		<div class="overviewcard__icon">WATERING</div>
+		{% gpio_15_state_function %}
+		<div class="overviewcard__info">
+			{% current_watering_schedule %}
+		</div>
+		{% gpio_15_state %}
+	</div>
+	<div class="overviewcard">
+		<div class="overviewcard__icon">CLIMATE</div>
+		{% gpio_17_state_function %}
+		<div class="overviewcard__info">
+			{% show_humidity %}
+			{% show_temp %}
+		</div>
+		{% gpio_17_state %}
+	</div>
+	<div class="overviewcard">
+		<div class="overviewcard__icon">EXHUAST</div>
+		{% gpio_18_state_function %}
+		<div class="overviewcard__info">
+		</div>
+		{% gpio_18_state %}
+	</div>
+</div>
+{% endblock content %}

@@ -422,4 +422,11 @@ def start():
 	else:
 		scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
 		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
-	scheduler.start()
+	try:
+		scheduler.start()
+		print('starting down')
+	except Exception as e:
+		print('shutting down')
+		scheduler.shutdown()
+		time.sleep(3)
+		scheduler.start()

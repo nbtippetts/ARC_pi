@@ -4,14 +4,15 @@ def get_humidity_temperature():
 	pin =4
 	new_humidity = 0.0
 	new_temperature = 0.0
-	for i in range(2):
+	break_loop = True;
+	while break_loop:
 		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 		if humidity is not None and temperature is not None:
 			humidity = int(humidity)
 			new_humidity = humidity
 			fahrenheit = (temperature * 9/5) + 32
 			new_temperature = int(fahrenheit)
-			break
+			break_loop=False
 		else:
 			print('Failed to retrieve data from humidity sensor.')
 			continue

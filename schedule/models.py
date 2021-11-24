@@ -8,11 +8,6 @@ class Schedule(models.Model):
 	gpio_pin = models.IntegerField(default=0)
 	job_id = models.TextField(default='')
 
-class ScheduleDateLog(models.Model):
-	start_date = models.DateTimeField(default=timezone.now)
-	end_date = models.DateTimeField(default=timezone.now)
-	gpio_pin = models.IntegerField(default=0)
-
 class ScheduleLog(models.Model):
 	start = models.TimeField(blank=True, null=True)
 	duration=models.DurationField(default='00:00:00', null=True)

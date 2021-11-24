@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load logging_display %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<div class="grid-container">
+	<main class="main">
+		<div class="main-cards">
+			{% select_logs %}
+			<div class="card">
+				<div class="main_card__icon">CLIMATE LOG</div>
+				{% log_data %}
+			</div>
+			<div class="card">
+				<div class="main_card__icon">LIGHTING LOG</div>
+				{% custom_gpio_14_schedule_log %}
+			</div>
+			<div class="card">
+				<div class="main_card__icon">WATERING LOG</div>
+				{% custom_gpio_15_schedule_log %}
+			</div>
+			<div class="card">
+				<div class="main_card__icon">EXHUAST LOG</div>
+				{% custom_gpio_18_schedule_log %}
+			</div>
+		</div>
+	</main>
+</div>
+
+
+{% endblock content %}

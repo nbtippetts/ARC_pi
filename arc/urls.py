@@ -50,4 +50,5 @@ urlpatterns = [
     path('schedule/', include('schedule.urls')),
     path('streamapp/', include('streamapp.urls')),
     path('notebook/', include('notebook.urls')),
+    path('allthelogs/', include('allthelogs.urls')),
 ]

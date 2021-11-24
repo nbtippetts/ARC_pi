@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'schedule.apps.ScheduleConfig',
     'streamapp.apps.StreamappConfig',
     'notebook.apps.NotebookConfig',
+    'allthelogs.apps.AllthelogsConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,7 +79,7 @@ TEMPLATES = [
 
             'libraries':{
                 'schedule_display': 'schedule.templatetags.schedule_display',
-                'climate_display': 'climate.templatetags.climate_display',
+                'logging_display': 'allthelogs.templatetags.logging_display',
             },
         },
     },
