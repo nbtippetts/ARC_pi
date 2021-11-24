@@ -5,7 +5,7 @@ services:
     restart: always
     # container_name: arc_web
     image: index.docker.io/noahtippetts/arc:latest
-    command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && python /arc/manage.py collectstatic --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/mem:/dev/mem"

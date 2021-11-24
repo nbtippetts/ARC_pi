@@ -420,7 +420,16 @@ def start():
 	if flag:
 		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
 	else:
-		scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+		try:
+			scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+		except Exception as e:
+			job_list = scheduler.get_jobs()
+			for job in job_list:
+				if job.id=='climate_job_id':
+					job.pause()
+					job.remove()
+					scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+					pass
 		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
 	try:
 		scheduler.start()

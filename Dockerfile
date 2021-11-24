@@ -32,3 +32,4 @@ COPY . /arc
 # copy project
 RUN python -V
 COPY ./platform_detect.py /opt/venv/lib/python3.7/site-packages/Adafruit_DHT/platform_detect.py
+RUN python /arc/manage.py collectstatic --noinput

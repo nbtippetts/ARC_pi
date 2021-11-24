@@ -6,7 +6,7 @@
 <div class="grid-container">
 	<main class="main">
 		{% overview_cards %}
-		<div class="main-cards">
+		<div id="climate_card_id">
 			<div class="card">
 				<div class="main_card__icon">CLIMATE</div>
 				<div id="chart_content" class="card-body" style="padding-top: 0px;">
@@ -18,7 +18,6 @@
 				{% set_climate_form %}
 			</div>
 			<div class="card">
-				<a href="{% url 'download_climate_csv' %}">Download Climate Logs</a>
 				<div class="main_card__icon">CLIMATE LOG</div>
 				{% log_data %}
 			</div>
