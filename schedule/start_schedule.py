@@ -5,11 +5,10 @@ from apscheduler.triggers.combining import OrTrigger
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
 import gpiozero
-import Adafruit_DHT
+from climate.hum_temp import get_humidity_temperature
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
 from climate.models import Exhaust, ClimateValues, ClimateLogs
-from climate.models import Exhaust
 import time
 
 
@@ -158,12 +157,9 @@ def relay_18():
 		pass
 
 def check_climate():
-	sensor = Adafruit_DHT.DHT22
-	pin =4
-	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-	if humidity is not None and temperature is not None:
+	humidity, fahrenheit = get_humidity_temperature()
+	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
-		fahrenheit = (temperature * 9/5) + 32
 		# This is were we will check for day time param or night time params
 		try:
 			ht_day_params = ClimateValues.objects.get(pk=1)
@@ -267,21 +263,15 @@ def check_climate():
 		print('Failed to retrieve data from climate sensor.')
 
 def climate_logs():
-	sensor = Adafruit_DHT.DHT22
-	pin =4
-	for i in range(20):
-		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-		if humidity is not None and temperature is not None:
-			humidity = int(humidity)
-			fahrenheit = (temperature * 9/5) + 32
-			ht_log = ClimateLogs()
-			ht_log.humidity = humidity
-			ht_log.temp = int(fahrenheit)
-			ht_log.save()
-			break
-		else:
-			print('Failed to retrieve data from humidity sensor.')
-			continue
+	humidity, fahrenheit = get_humidity_temperature()
+	if humidity is not None and fahrenheit is not None:
+		humidity = int(humidity)
+		ht_log = ClimateLogs()
+		ht_log.humidity = humidity
+		ht_log.temp = int(fahrenheit)
+		ht_log.save()
+	else:
+		print('Failed to retrieve data from humidity sensor.')
 
 def button_relay_job(status,gpio_pin,button_job_id):
 	if status == 'False':
@@ -439,3 +429,4 @@ def start():
 		scheduler.shutdown()
 		time.sleep(3)
 		scheduler.start()
+		pass

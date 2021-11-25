@@ -49,35 +49,7 @@
     color:#EDECEB;
     background: #252422;
   }
-  /* .exhaust_button {
-    width: 100%;
-    height: 25px;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-family: Helvetica;
-    font-size: 14px;
-    color: #252422;
-    background-color: #EDECEB;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 6px;
-    transition: all 0.5s ease;
-  }
-  .exhaust_button:hover {
-    width: 100%;
-    height: 27px;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-family: Helvetica;
-    font-size: 15px;
-    color:#EDECEB;
-    background-color: #252422;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 6px;
-  } */
+
 #id_gpio_pin > option:nth-child(3) {
   display: none;
 }
@@ -94,15 +66,13 @@
   font-size: 12px;
 }
 
-
-
   .overviewcard {
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: space-between;
     padding: 20px;
-    background: #EDECEB;
+    background: white;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
