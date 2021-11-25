@@ -7,6 +7,4 @@ from .views import climate, set_climate
 urlpatterns = [
     path('', climate, name='climate_view'),
     path('set_climate', set_climate, name='set_climate'),
-    # path('select_climate_logs', select_climate_logs, name='select_climate_logs'),
-    # path('download_climate_csv', download_climate_csv, name='download_climate_csv'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
