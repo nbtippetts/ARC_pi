@@ -11,9 +11,9 @@ class Migration(migrations.Migration):
 
     def insert_data(apps,schema_editior):
         Exhaust = apps.get_model('climate', 'Exhaust')
-        exhaust = Exhaust(pk=1,job_id='button_relay_job_id_17',status='False',automation_status='True')
+        exhaust = Exhaust(pk=1,job_id='button_relay_job_id_2',status='False',automation_status='True')
         exhaust.save()
-        exhaust = Exhaust(pk=2,job_id='button_relay_job_id_18',status='False',automation_status='True')
+        exhaust = Exhaust(pk=2,job_id='button_relay_job_id_3',status='False',automation_status='True')
         exhaust.save()
 
     operations = [

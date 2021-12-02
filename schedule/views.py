@@ -56,7 +56,7 @@ def schedule(request):
 def update_schedule(request):
 	# If this is a POST request then process the Form data
 	if request.method == 'POST':
-		if request.POST['gpio_pin']=='18':
+		if request.POST['gpio_pin']=='3':
 			print(request.POST['gpio_pin'])
 		form = ScheduleForm(request.POST)
 		# request.POST['gpio_pin']=form.cleaned_data['gpio_pin']
@@ -67,7 +67,7 @@ def update_schedule(request):
 			start_schedule.schedule_display_inputs(schedule_input_display,gpio_pin)
 			for schedule_input in schedule_input_list:
 				print(schedule_input)
-				if gpio_pin == '18':
+				if gpio_pin == '3':
 					how_often = {}
 					how_often['hour']=schedule_input['schedule_key'][1]
 					how_often['minute']=schedule_input['schedule_key'][2]
@@ -145,9 +145,9 @@ def relay_on_off(request):
 				else:
 					relay_status.button_status=status
 					relay_status.save()
-			elif request.POST.get('17'):
+			elif request.POST.get('2'):
 				pk=1
-				gpio_pin=17
+				gpio_pin=2
 				if auto_status == None:
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.status=status
@@ -156,9 +156,9 @@ def relay_on_off(request):
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.auto_status=auto_status
 					relay_status.save()
-			elif request.POST.get('18'):
+			elif request.POST.get('3'):
 				pk=2
-				gpio_pin=18
+				gpio_pin=3
 				if auto_status == None:
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.status=status

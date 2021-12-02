@@ -73,19 +73,19 @@ def show_gpio_15_schedule_log():
 		}
 		return{'latest_schedule': no_data}
 
-@register.inclusion_tag('gpio_18_schedule_log.html')
-def show_gpio_18_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=18).order_by('-id')[:5]
+@register.inclusion_tag('gpio_3_schedule_log.html')
+def show_gpio_3_schedule_log():
+	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3).order_by('-id')[:5]
 	# try:
-	# 	get_dates = SelectLogs.objects.get(gpio_pin=18)
+	# 	get_dates = SelectLogs.objects.get(gpio_pin=3)
 	# 	print(get_dates.start_date)
 	# 	print(get_dates.end_date)
-	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=18,
+	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3,
 	# 				finish_date__gte=get_dates.start_date,
 	# 				finish_date__lte=get_dates.end_date
 	# 			)
 	# except SelectLogs.DoesNotExist:
-	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=18).order_by('-id')[:5]
+	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3).order_by('-id')[:5]
 	# 	pass
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
@@ -138,8 +138,8 @@ def gpio_15_state():
 		pin_state = 0
 	return {'button_form': form, 'gpio_15_state':pin_state}
 
-@register.inclusion_tag('relay_17.html')
-def gpio_17_state():
+@register.inclusion_tag('relay_2.html')
+def gpio_2_state():
 	relay_state = Exhaust.objects.get(pk=1)
 	form = ExhaustForm(initial={
 		'status': relay_state.status,
@@ -152,10 +152,10 @@ def gpio_17_state():
 		pin_state = 1
 	else:
 		pin_state = 0
-	return {'button_form': form,'gpio_17_state':pin_state, 'gpio_17_auto_state':auto_pin_state}
+	return {'button_form': form,'gpio_2_state':pin_state, 'gpio_2_auto_state':auto_pin_state}
 
-@register.inclusion_tag('relay_18.html')
-def gpio_18_state():
+@register.inclusion_tag('relay_3.html')
+def gpio_3_state():
 	relay_state = Exhaust.objects.get(pk=2)
 	form = ExhaustForm(initial={
 		'status': relay_state.status,
@@ -168,7 +168,7 @@ def gpio_18_state():
 		pin_state = 1
 	else:
 		pin_state = 0
-	return {'button_form': form,'gpio_18_state':pin_state, 'gpio_18_auto_state':auto_pin_state}
+	return {'button_form': form,'gpio_3_state':pin_state, 'gpio_3_auto_state':auto_pin_state}
 
 @register.inclusion_tag('gpio_14.html')
 def gpio_14_state_function():
@@ -194,8 +194,8 @@ def gpio_15_state_function():
 		pin_state = 0
 	return {'gpio_15_state':pin_state}
 
-@register.inclusion_tag('gpio_17.html')
-def gpio_17_state_function():
+@register.inclusion_tag('gpio_2.html')
+def gpio_2_state_function():
 	relay_state = Exhaust.objects.get(pk=1)
 	pin_state = 0
 	auto_pin_state = 0
@@ -207,10 +207,10 @@ def gpio_17_state_function():
 		auto_pin_state = 1
 	else:
 		auto_pin_state = 0
-	return {'gpio_17_state':pin_state,'gpio_17_auto_state':auto_pin_state}
+	return {'gpio_2_state':pin_state,'gpio_2_auto_state':auto_pin_state}
 
-@register.inclusion_tag('gpio_18.html')
-def gpio_18_state_function():
+@register.inclusion_tag('gpio_3.html')
+def gpio_3_state_function():
 	relay_state = Exhaust.objects.get(pk=2)
 	pin_state = 0
 	auto_pin_state = 0
@@ -222,7 +222,7 @@ def gpio_18_state_function():
 		auto_pin_state = 1
 	else:
 		auto_pin_state = 0
-	return {'gpio_18_state':pin_state,'gpio_18_auto_state':auto_pin_state}
+	return {'gpio_3_state':pin_state,'gpio_3_auto_state':auto_pin_state}
 
 
 @register.inclusion_tag('current_humidity.html')

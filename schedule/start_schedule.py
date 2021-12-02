@@ -114,14 +114,14 @@ def relay_15():
 		print(e)
 		pass
 
-def relay_17():
+def relay_2():
 	try:
-		relay = gpiozero.OutputDevice(17, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(2, active_high=True, initial_value=False)
 		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=1)
 			if relay_status.status == 'True':
 				try:
-					print(' button_relay_17 relay ON')
+					print(' button_relay_2 relay ON')
 
 				except Exception as e:
 					print(e)
@@ -135,14 +135,14 @@ def relay_17():
 		print(e)
 		pass
 
-def relay_18():
+def relay_3():
 	try:
-		relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(3, active_high=True, initial_value=False)
 		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=2)
 			if relay_status.status == 'True':
 				try:
-					print(' button_relay_18 relay ON')
+					print(' button_relay_3 relay ON')
 
 				except Exception as e:
 					print(e)
@@ -191,7 +191,7 @@ def check_climate():
 		humidity_nagitive = ht_params.humidity_value-ht_params.buffer_value
 		temp_params = ht_params.temp_value+ht_params.buffer_value
 		print(humidity_positive, temp_params)
-		button_job_id = f'button_relay_job_id_18'
+		button_job_id = f'button_relay_job_id_3'
 		if humidity >= humidity_positive:
 			try:
 				e = Exhaust.objects.get(pk=2)
@@ -202,12 +202,12 @@ def check_climate():
 						e.job_id=button_job_id
 						e.status=True
 						e.save()
-						button_relay_job('True',18,button_job_id)
+						button_relay_job('True',3,button_job_id)
 				else:
 					e.job_id=button_job_id
 					e.status=False
 					e.save()
-					button_relay_job('False',18,button_job_id)
+					button_relay_job('False',3,button_job_id)
 			except Exception as e:
 				pass
 
@@ -221,7 +221,7 @@ def check_climate():
 					e.job_id=button_job_id
 					e.status=True
 					e.save()
-					button_relay_job('True',18,button_job_id)
+					button_relay_job('True',3,button_job_id)
 			except Exception as e:
 				pass
 
@@ -231,31 +231,31 @@ def check_climate():
 				e.job_id=button_job_id
 				e.status=False
 				e.save()
-				button_relay_job('False',18,button_job_id)
+				button_relay_job('False',3,button_job_id)
 			except Exception as e:
 				pass
 
-		button_17_job_id = f'button_relay_job_id_17'
+		button_2_job_id = f'button_relay_job_id_2'
 		if humidity <= humidity_nagitive:
 			try:
 				e = Exhaust.objects.get(pk=1)
 				if e.status == 'True':
 					print('Exhuast arlready running so continue')
 				else:
-					e.job_id=button_17_job_id
+					e.job_id=button_2_job_id
 					e.status=True
 					e.save()
-					button_relay_job('True',17,button_17_job_id)
+					button_relay_job('True',2,button_2_job_id)
 			except Exception as e:
 				pass
 
 		else:
 			try:
 				e = Exhaust.objects.get(pk=1)
-				e.job_id=button_17_job_id
+				e.job_id=button_2_job_id
 				e.status=False
 				e.save()
-				button_relay_job('False',17,button_17_job_id)
+				button_relay_job('False',2,button_2_job_id)
 			except Exception as e:
 				pass
 
@@ -288,29 +288,29 @@ def button_relay_job(status,gpio_pin,button_job_id):
 			scheduler.add_job(relay_14, id=button_job_id, replace_existing=True)
 		elif gpio_pin == 15:
 			scheduler.add_job(relay_15, id=button_job_id, replace_existing=True)
-		if gpio_pin == 17:
-			scheduler.add_job(relay_17, id=button_job_id, replace_existing=True)
-		elif gpio_pin == 18:
-			scheduler.add_job(relay_18, id=button_job_id, replace_existing=True)
+		if gpio_pin == 2:
+			scheduler.add_job(relay_2, id=button_job_id, replace_existing=True)
+		elif gpio_pin == 3:
+			scheduler.add_job(relay_3, id=button_job_id, replace_existing=True)
 		else:
 			return
 	return
 
 def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_job_id):
 	print(how_often)
-	if gpio_pin == '18':
+	if gpio_pin == '3':
 		triggers = CronTrigger(minute=how_often_day)
 		try:
 			e = Exhaust.objects.get(pk=1)
 			e.status=False
 			e.automation_status=False
 			e.save()
-			e18 = Exhaust.objects.get(pk=2)
-			e18.status=False
-			e18.automation_status=False
-			e18.save()
-			button_relay_job('False',17,'button_relay_job_id_17')
-			button_relay_job('False',18,'button_relay_job_id_18')
+			e3 = Exhaust.objects.get(pk=2)
+			e3.status=False
+			e3.automation_status=False
+			e3.save()
+			button_relay_job('False',2,'button_relay_job_id_2')
+			button_relay_job('False',3,'button_relay_job_id_3')
 		except Exception as e:
 			pass
 	else:
@@ -322,7 +322,7 @@ def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_jo
 def remove_schedule(schedule_job_id,gpio_pin):
 	try:
 		job_list = scheduler.get_jobs()
-		if gpio_pin=='18':
+		if gpio_pin=='3':
 			for job in job_list:
 				if job.id=='climate_job_id':
 					job.pause()
@@ -348,11 +348,11 @@ def exhaust_automation():
 	try:
 		job_list = scheduler.get_jobs()
 		for job in job_list:
-			if job.id=='update_schedule_job_id_18':
+			if job.id=='update_schedule_job_id_3':
 				job.pause()
-				relay_status = RelayStatus.objects.get(gpio_pin=18)
+				relay_status = RelayStatus.objects.get(gpio_pin=3)
 				relay_status.schedule_status=False
-				relay_status.gpio_pin=18
+				relay_status.gpio_pin=3
 				relay_status.save()
 				job.remove()
 			else:
@@ -403,7 +403,7 @@ def start():
 	job_list = scheduler.get_jobs()
 	flag=0
 	for job in job_list:
-		if job.id=='update_schedule_job_id_18':
+		if job.id=='update_schedule_job_id_3':
 			flag=1
 		else:
 			continue

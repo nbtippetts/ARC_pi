@@ -68,7 +68,7 @@
 					{% for error in form.non_field_errors %}
 					<p class="help is-danger">{{ error }}</p>
 					{% endfor %}
-					<input type="hidden" name="gpio_pin" value="18">
+					<input type="hidden" name="gpio_pin" value="3">
 					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 				</form>
 				<form action="{% url 'start_automation' %}" method="POST" class="exhaust_automation_form">
@@ -89,7 +89,7 @@
 			</div>
 			<div class="card">
 				<div class="main_card__icon">EXHUAST LOG</div>
-				{% show_gpio_18_schedule_log %}
+				{% show_gpio_3_schedule_log %}
 			</div>
 		</div>
 	</main>

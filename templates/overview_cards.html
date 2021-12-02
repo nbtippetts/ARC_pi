@@ -21,19 +21,19 @@
 	</div>
 	<div class="overviewcard">
 		<div class="overviewcard__icon">CLIMATE</div>
-		{% gpio_17_state_function %}
+		{% gpio_2_state_function %}
 		<div class="overviewcard__info">
 			{% show_humidity %}
 			{% show_temp %}
 		</div>
-		{% gpio_17_state %}
+		{% gpio_2_state %}
 	</div>
 	<div class="overviewcard">
 		<div class="overviewcard__icon">EXHUAST</div>
-		{% gpio_18_state_function %}
+		{% gpio_3_state_function %}
 		<div class="overviewcard__info">
 		</div>
-		{% gpio_18_state %}
+		{% gpio_3_state %}
 	</div>
 </div>
 {% endblock content %}
