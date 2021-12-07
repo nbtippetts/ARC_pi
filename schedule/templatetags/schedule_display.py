@@ -227,7 +227,7 @@ def gpio_3_state_function():
 
 @register.inclusion_tag('current_humidity.html')
 def show_humidity():
-	current_humidity, current_temp = get_humidity_temperature()
+	current_humidity, current_temp, vpd = get_humidity_temperature()
 	try:
 		check_current_values = ClimateValues.objects.get(pk=2)
 	except Exception as e:
@@ -259,12 +259,12 @@ def show_humidity():
 			current_values = ClimateValues.objects.get(pk=1)
 			pass
 
-	return {'humidity': current_humidity,'temp': current_temp, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
+	return {'humidity': current_humidity,'temp': current_temp, 'vpd': vpd, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
 
 @register.inclusion_tag('current_temp.html')
 def show_temp():
 	current_temp = show_humidity()
-	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value']}
+	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value'], 'vpd_value':current_temp['vpd']}
 
 # @register.inclusion_tag('climate_log_form.html')
 # def select_climate_logs():

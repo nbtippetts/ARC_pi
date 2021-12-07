@@ -29,7 +29,7 @@ def download_climate_csv(request, *args, **kwargs):
 	response = HttpResponse(content_type='text/csv')
 	cd = f'attachment; filename=climate_logs.csv'
 	response['Content-Disposition'] = cd
-	fieldnames = ('humidity','temp','created_at')
+	fieldnames = ('humidity','temp','vpd','created_at')
 	data=ClimateLogs.objects.values(*fieldnames)
 	writer = csv.DictWriter(response, fieldnames=fieldnames)
 	writer.writeheader()

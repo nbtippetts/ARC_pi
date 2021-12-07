@@ -157,7 +157,7 @@ def relay_3():
 		pass
 
 def check_climate():
-	humidity, fahrenheit = get_humidity_temperature()
+	humidity, fahrenheit, vpd = get_humidity_temperature()
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		# This is were we will check for day time param or night time params
@@ -263,12 +263,13 @@ def check_climate():
 		print('Failed to retrieve data from climate sensor.')
 
 def climate_logs():
-	humidity, fahrenheit = get_humidity_temperature()
+	humidity, fahrenheit, vpd = get_humidity_temperature()
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		ht_log = ClimateLogs()
 		ht_log.humidity = humidity
 		ht_log.temp = int(fahrenheit)
+		ht_log.vpd = vpd
 		ht_log.save()
 	else:
 		print('Failed to retrieve data from humidity sensor.')

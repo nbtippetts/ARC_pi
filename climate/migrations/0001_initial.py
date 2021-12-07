@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('humidity', models.IntegerField(default=0)),
                 ('temp', models.IntegerField(default=0)),
+                ('vpd', models.DecimalField(max_digits=5, decimal_places=3, default=0.00)),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
             ],
         ),

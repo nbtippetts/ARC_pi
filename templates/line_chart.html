@@ -30,6 +30,12 @@
 				pointBackgroundColor: 'rgb(54, 162, 235)',
 				fill: false,
 				backgroundColor: 'grey'
+			},{
+				label: "VPD",
+				data: [{% for t in data %} "{{ t.vpd }}", {% endfor %}],
+				pointBackgroundColor: 'rgb(54, 162, 235)',
+				fill: false,
+				backgroundColor: 'grey'
 			}]
 		},
 		options: {

@@ -5,6 +5,7 @@ from django.utils import timezone
 class ClimateLogs(models.Model):
 	humidity = models.IntegerField(default=0)
 	temp = models.IntegerField(default=0)
+	vpd = models.DecimalField(max_digits=5, decimal_places=3, default=0.00)
 	created_at = models.DateTimeField(default=timezone.now)
 
 	def __str__(self):

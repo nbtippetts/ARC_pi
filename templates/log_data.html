@@ -4,6 +4,7 @@
             <tr>
                 <th>HUMIDITY</th>
                 <th>TEMPERATURE</th>
+                <th>VPD</th>
                 <th>TIMESTAMP</th>
             </tr>
         </thead>
@@ -12,6 +13,7 @@
             <tr>
                 <td style="font-size: 14px;">{{ d.humidity }}%</td>
                 <td style="font-size: 14px;">{{ d.temp }}<span>&#8457;</span></td>
+                <td style="font-size: 14px;">{{ d.vpd }}%</td>
                 <td style="font-size: 14px;">{{ d.created_at }}</td>
             </tr>
             {% endfor %}
