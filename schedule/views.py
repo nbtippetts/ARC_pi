@@ -145,9 +145,9 @@ def relay_on_off(request):
 				else:
 					relay_status.button_status=status
 					relay_status.save()
-			elif request.POST.get('2'):
+			elif request.POST.get('18'):
 				pk=1
-				gpio_pin=2
+				gpio_pin=18
 				if auto_status == None:
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.status=status
@@ -156,9 +156,9 @@ def relay_on_off(request):
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.auto_status=auto_status
 					relay_status.save()
-			elif request.POST.get('3'):
+			elif request.POST.get('23'):
 				pk=2
-				gpio_pin=3
+				gpio_pin=23
 				if auto_status == None:
 					relay_status = Exhaust.objects.get(pk=pk)
 					relay_status.status=status

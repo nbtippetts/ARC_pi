@@ -56,15 +56,15 @@ def custom_gpio_15_schedule_log():
 @register.inclusion_tag('gpio_3_schedule_log.html')
 def custom_gpio_3_schedule_log():
 	try:
-		get_dates = SelectLogs.objects.get(gpio_pin=3)
+		get_dates = SelectLogs.objects.get(gpio_pin=23)
 		print(get_dates.start_date)
 		print(get_dates.end_date)
-		latest_schedule = ScheduleLog.objects.filter(gpio_pin=3,
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=23,
 					finish_date__gte=get_dates.start_date,
 					finish_date__lte=get_dates.end_date
 				)
 	except SelectLogs.DoesNotExist:
-		latest_schedule = ScheduleLog.objects.filter(gpio_pin=3).order_by('-id')[:5]
+		latest_schedule = ScheduleLog.objects.filter(gpio_pin=23).order_by('-id')[:5]
 		pass
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}

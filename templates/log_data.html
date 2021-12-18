@@ -13,7 +13,8 @@
             <tr>
                 <td style="font-size: 14px;">{{ d.humidity }}%</td>
                 <td style="font-size: 14px;">{{ d.temp }}<span>&#8457;</span></td>
-                <td style="font-size: 14px;">{{ d.vpd }}%</td>
+                <td style="font-size: 14px;">{{ d.vpd }} kpa</td>
+                <td style="font-size: 14px;">{{ d.co2 }} ppm</td>
                 <td style="font-size: 14px;">{{ d.created_at }}</td>
             </tr>
             {% endfor %}

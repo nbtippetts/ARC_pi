@@ -4,13 +4,14 @@
 	{% csrf_token %}
 		<div class="item">
 			{{ form.humidity_value_day }}
-			{{ form.buffer_value_day }}
 			{{ form.temp_value_day }}
+			{{ form.co2_value_day }}
+			{{ form.buffer_value_day }}
 		</div>
 		<div class="item">
 			{{ form.humidity_value_night }}
-			{{ form.buffer_value_night }}
 			{{ form.temp_value_night }}
+			{{ form.buffer_value_night }}
 		</div>
 		<div class="item">
 			<div class="card-subtitle mb-2 text-muted">Set Night Time Values To Run Between Two Times</div>

@@ -6,9 +6,8 @@ from allthelogs.forms import GetLogsForm
 from climate.models import Exhaust
 from climate.forms import ExhaustForm
 from ..forms import RemoveScheduleForm, RelayStatusForm
-from climate.models import ClimateLogs, ClimateValues, Exhaust
+from climate.models import ClimateLogs, ClimateValues, Exhaust, ClimateData
 from climate.forms import ClimateValuesForm, ExhaustForm
-from climate.hum_temp import get_humidity_temperature
 from datetime import datetime
 
 @register.inclusion_tag('overview_cards.html')
@@ -75,17 +74,17 @@ def show_gpio_15_schedule_log():
 
 @register.inclusion_tag('gpio_3_schedule_log.html')
 def show_gpio_3_schedule_log():
-	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3).order_by('-id')[:5]
+	latest_schedule = ScheduleLog.objects.filter(gpio_pin=23).order_by('-id')[:5]
 	# try:
-	# 	get_dates = SelectLogs.objects.get(gpio_pin=3)
+	# 	get_dates = SelectLogs.objects.get(gpio_pin=23)
 	# 	print(get_dates.start_date)
 	# 	print(get_dates.end_date)
-	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3,
+	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=23,
 	# 				finish_date__gte=get_dates.start_date,
 	# 				finish_date__lte=get_dates.end_date
 	# 			)
 	# except SelectLogs.DoesNotExist:
-	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=3).order_by('-id')[:5]
+	# 	latest_schedule = ScheduleLog.objects.filter(gpio_pin=23).order_by('-id')[:5]
 	# 	pass
 	if latest_schedule.exists():
 		return {'latest_schedule': latest_schedule}
@@ -227,7 +226,11 @@ def gpio_3_state_function():
 
 @register.inclusion_tag('current_humidity.html')
 def show_humidity():
-	current_humidity, current_temp, vpd = get_humidity_temperature()
+	check_climate=ClimateData.objects.first()
+	current_humidity=check_climate.humidity
+	current_temp=check_climate.temp
+	vpd=check_climate.vpd
+	co2=check_climate.co2
 	try:
 		check_current_values = ClimateValues.objects.get(pk=2)
 	except Exception as e:
@@ -259,12 +262,12 @@ def show_humidity():
 			current_values = ClimateValues.objects.get(pk=1)
 			pass
 
-	return {'humidity': current_humidity,'temp': current_temp, 'vpd': vpd, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
+	return {'humidity': current_humidity,'temp': current_temp, 'vpd': vpd, 'co2': co2, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
 
 @register.inclusion_tag('current_temp.html')
 def show_temp():
 	current_temp = show_humidity()
-	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value'], 'vpd_value':current_temp['vpd']}
+	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value'], 'vpd_value':current_temp['vpd'], 'co2_value':current_temp['co2']}
 
 # @register.inclusion_tag('climate_log_form.html')
 # def select_climate_logs():

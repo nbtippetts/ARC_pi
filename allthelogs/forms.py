@@ -1,5 +1,4 @@
 from django import forms
-from bootstrap_datepicker_plus import DatePickerInput
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
@@ -7,8 +6,8 @@ from datetime import datetime
 select_gpio_pin = (
 	(14, 'Lights'),
 	(15, 'Water'),
-	(4, 'Climate'),
-	(3, 'Exhuast')
+	(18, 'Climate'),
+	(23, 'Exhuast')
 )
 
 class GetLogsForm(forms.Form):

@@ -15,6 +15,8 @@ class Migration(migrations.Migration):
         exhaust.save()
         exhaust = Exhaust(pk=2,job_id='button_relay_job_id_3',status='False',automation_status='True')
         exhaust.save()
+        exhaust = Exhaust(pk=3,job_id='button_relay_job_id_4',status='False',automation_status='True')
+        exhaust.save()
 
     operations = [
         migrations.RunPython(insert_data)

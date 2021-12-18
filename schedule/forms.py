@@ -1,7 +1,6 @@
 from django import forms
 from .models import Schedule,RelayStatus,ScheduleLog
 from simpleduration import Duration
-from bootstrap_datepicker_plus import DatePickerInput
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from schedule.timer_inputs import timer_hours, timer_minutes
@@ -32,7 +31,7 @@ cron_job_hours = (
 select_gpio_pin = (
 	(14, 'Lights'),
 	(15, 'Water'),
-	(3, 'Exhuast')
+	(23, 'Exhuast')
 )
 
 duration_hour = timer_hours()
@@ -77,7 +76,7 @@ class ScheduleForm(forms.Form):
 		self.cleaned_data['how_often_display']=[]
 		gpio_pin=self.cleaned_data['gpio_pin']
 		schedule_job_id = f'update_schedule_job_id_{gpio_pin}'
-		if gpio_pin == '3':
+		if gpio_pin == '23':
 			run_time_list = [
 				{'job_id':f'{schedule_job_id}','schedule_key': [datetime.now().time(),self.cleaned_data['duration_hours4'],self.cleaned_data['duration_minutes4'],self.cleaned_data['run_time_input4']]},
 			]
@@ -92,7 +91,7 @@ class ScheduleForm(forms.Form):
 			print(run_time['schedule_key'][0])
 			if run_time['schedule_key'][0] != None:
 				self.cleaned_data['how_often'].append(run_time)
-				if gpio_pin == '3':
+				if gpio_pin == '23':
 					exhaust_run=self.cleaned_data.get('run_time_input4')
 					exhaust_run_time=dict(self.fields['run_time_input4'].choices)[exhaust_run]
 					print(exhaust_run_time)

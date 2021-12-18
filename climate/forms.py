@@ -12,12 +12,14 @@ class TimeInput(forms.TimeInput):
 
 class ClimateValuesForm(forms.Form):
 	humidity_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Humidity'}))
-	buffer_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Buffer'}))
 	temp_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Temperature'}))
+	co2_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time CO2'}))
+	buffer_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Buffer'}))
 
 	humidity_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Humidity'}))
-	buffer_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Buffer'}))
 	temp_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Temperature'}))
+	buffer_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Buffer'}))
+	
 	start_time = forms.TimeField(widget=TimeInput)
 	end_time = forms.TimeField(widget=TimeInput)
 	def clean(self):

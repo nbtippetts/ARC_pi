@@ -5,10 +5,10 @@ from apscheduler.triggers.combining import OrTrigger
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
 import gpiozero
-from climate.hum_temp import get_humidity_temperature
+from climate.hum_temp import read_sensor_data
 from datetime import datetime, time
 from .models import Schedule, ScheduleLog, RelayStatus
-from climate.models import Exhaust, ClimateValues, ClimateLogs
+from climate.models import Exhaust, ClimateValues, ClimateLogs, ClimateData
 import time
 
 
@@ -116,7 +116,7 @@ def relay_15():
 
 def relay_2():
 	try:
-		relay = gpiozero.OutputDevice(2, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(18, active_high=True, initial_value=False)
 		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=1)
 			if relay_status.status == 'True':
@@ -137,7 +137,7 @@ def relay_2():
 
 def relay_3():
 	try:
-		relay = gpiozero.OutputDevice(3, active_high=True, initial_value=False)
+		relay = gpiozero.OutputDevice(23, active_high=True, initial_value=False)
 		while relay.active_high:
 			relay_status = Exhaust.objects.get(pk=2)
 			if relay_status.status == 'True':
@@ -156,8 +156,33 @@ def relay_3():
 		print(e)
 		pass
 
+def relay_24():
+	try:
+		relay = gpiozero.OutputDevice(24, active_high=True, initial_value=False)
+		while relay.active_high:
+			relay_status = Exhaust.objects.get(pk=3)
+			if relay_status.status == 'True':
+				try:
+					print(' button_relay_24 relay ON')
+
+				except Exception as e:
+					print(e)
+					pass
+			elif relay_status.automation_status == 'False' and relay_status.status == 'True':
+				break
+			else:
+				break
+			time.sleep(5)
+	except Exception as e:
+		print(e)
+		pass
+
 def check_climate():
-	humidity, fahrenheit, vpd = get_humidity_temperature()
+	check_climate=ClimateData.objects.first()
+	humidity=check_climate.humidity
+	fahrenheit=check_climate.temp
+	vpd=check_climate.vpd
+	co2=check_climate.co2
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		# This is were we will check for day time param or night time params
@@ -169,6 +194,7 @@ def check_climate():
 			ht_day_params.humidity_value=humidity
 			ht_day_params.buffer_value=5
 			ht_day_params.temp_value=int(fahrenheit)
+			ht_day_params.co2_value=co2
 			ht_day_params.save()
 		try:
 			ht_night_params = ClimateValues.objects.get(pk=2)
@@ -178,19 +204,23 @@ def check_climate():
 			ht_night_params.humidity_value=humidity
 			ht_night_params.buffer_value=5
 			ht_night_params.temp_value=int(fahrenheit)
+			ht_night_params.co2_value=9999
 			ht_night_params.start_time=datetime.now().time()
 			ht_night_params.end_time=datetime.now().time()
 			ht_night_params.save()
 		timenow = datetime.now().time()
 		if timenow > ht_night_params.start_time and timenow < ht_night_params.end_time:
 			ht_params = ClimateValues.objects.get(pk=2)
+			co2_nagitive = ht_params.co2_value
 		else:
 			ht_params = ClimateValues.objects.get(pk=1)
+			co2_nagitive = ht_params.co2_value-ht_params.buffer_value
+
 
 		humidity_positive = ht_params.humidity_value+ht_params.buffer_value
 		humidity_nagitive = ht_params.humidity_value-ht_params.buffer_value
 		temp_params = ht_params.temp_value+ht_params.buffer_value
-		print(humidity_positive, temp_params)
+		# print(humidity_positive, temp_params)
 		button_job_id = f'button_relay_job_id_3'
 		if humidity >= humidity_positive:
 			try:
@@ -202,12 +232,12 @@ def check_climate():
 						e.job_id=button_job_id
 						e.status=True
 						e.save()
-						button_relay_job('True',3,button_job_id)
+						button_relay_job('True',23,button_job_id)
 				else:
 					e.job_id=button_job_id
 					e.status=False
 					e.save()
-					button_relay_job('False',3,button_job_id)
+					button_relay_job('False',23,button_job_id)
 			except Exception as e:
 				pass
 
@@ -221,7 +251,7 @@ def check_climate():
 					e.job_id=button_job_id
 					e.status=True
 					e.save()
-					button_relay_job('True',3,button_job_id)
+					button_relay_job('True',23,button_job_id)
 			except Exception as e:
 				pass
 
@@ -231,7 +261,7 @@ def check_climate():
 				e.job_id=button_job_id
 				e.status=False
 				e.save()
-				button_relay_job('False',3,button_job_id)
+				button_relay_job('False',23,button_job_id)
 			except Exception as e:
 				pass
 
@@ -240,12 +270,12 @@ def check_climate():
 			try:
 				e = Exhaust.objects.get(pk=1)
 				if e.status == 'True':
-					print('Exhuast arlready running so continue')
+					print('Humidity arlready running so continue')
 				else:
 					e.job_id=button_2_job_id
 					e.status=True
 					e.save()
-					button_relay_job('True',2,button_2_job_id)
+					button_relay_job('True',18,button_2_job_id)
 			except Exception as e:
 				pass
 
@@ -255,7 +285,31 @@ def check_climate():
 				e.job_id=button_2_job_id
 				e.status=False
 				e.save()
-				button_relay_job('False',2,button_2_job_id)
+				button_relay_job('False',18,button_2_job_id)
+			except Exception as e:
+				pass
+
+		co2_button_job_id = f'button_relay_job_id_4'
+		if co2 <= co2_nagitive:
+			try:
+				e = Exhaust.objects.get(pk=3)
+				if e.status == 'True':
+					print('CO2 arlready running so continue')
+				else:
+					e.job_id=co2_button_job_id
+					e.status=True
+					e.save()
+					button_relay_job('True',24,co2_button_job_id)
+			except Exception as e:
+				pass
+
+		else:
+			try:
+				e = Exhaust.objects.get(pk=3)
+				e.job_id=co2_button_job_id
+				e.status=False
+				e.save()
+				button_relay_job('False',24,co2_button_job_id)
 			except Exception as e:
 				pass
 
@@ -263,13 +317,18 @@ def check_climate():
 		print('Failed to retrieve data from climate sensor.')
 
 def climate_logs():
-	humidity, fahrenheit, vpd = get_humidity_temperature()
+	check_climate=ClimateData.objects.first()
+	humidity=check_climate.humidity
+	fahrenheit=check_climate.temp
+	vpd=check_climate.vpd
+	co2=check_climate.co2
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		ht_log = ClimateLogs()
 		ht_log.humidity = humidity
 		ht_log.temp = int(fahrenheit)
 		ht_log.vpd = vpd
+		ht_log.co2 = co2
 		ht_log.save()
 	else:
 		print('Failed to retrieve data from humidity sensor.')
@@ -289,17 +348,19 @@ def button_relay_job(status,gpio_pin,button_job_id):
 			scheduler.add_job(relay_14, id=button_job_id, replace_existing=True)
 		elif gpio_pin == 15:
 			scheduler.add_job(relay_15, id=button_job_id, replace_existing=True)
-		if gpio_pin == 2:
+		if gpio_pin == 18:
 			scheduler.add_job(relay_2, id=button_job_id, replace_existing=True)
-		elif gpio_pin == 3:
+		elif gpio_pin == 23:
 			scheduler.add_job(relay_3, id=button_job_id, replace_existing=True)
+		elif gpio_pin == 24:
+			scheduler.add_job(relay_24, id=button_job_id, replace_existing=True)
 		else:
 			return
 	return
 
 def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_job_id):
 	print(how_often)
-	if gpio_pin == '3':
+	if gpio_pin == '23':
 		triggers = CronTrigger(minute=how_often_day)
 		try:
 			e = Exhaust.objects.get(pk=1)
@@ -310,8 +371,13 @@ def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_jo
 			e3.status=False
 			e3.automation_status=False
 			e3.save()
-			button_relay_job('False',2,'button_relay_job_id_2')
-			button_relay_job('False',3,'button_relay_job_id_3')
+			e3 = Exhaust.objects.get(pk=3)
+			e3.status=False
+			e3.automation_status=False
+			e3.save()
+			button_relay_job('False',18,'button_relay_job_id_2')
+			button_relay_job('False',23,'button_relay_job_id_3')
+			button_relay_job('False',24,'button_relay_job_id_4')
 		except Exception as e:
 			pass
 	else:
@@ -323,7 +389,7 @@ def add_schedule(how_often_day, how_often,schedule_duration,gpio_pin,schedule_jo
 def remove_schedule(schedule_job_id,gpio_pin):
 	try:
 		job_list = scheduler.get_jobs()
-		if gpio_pin=='3':
+		if gpio_pin=='23':
 			for job in job_list:
 				if job.id=='climate_job_id':
 					job.pause()
@@ -351,11 +417,11 @@ def exhaust_automation():
 		for job in job_list:
 			if job.id=='update_schedule_job_id_3':
 				job.pause()
-				relay_status = RelayStatus.objects.get(gpio_pin=3)
-				relay_status.schedule_status=False
-				relay_status.gpio_pin=3
-				relay_status.save()
 				job.remove()
+				relay_status = RelayStatus.objects.get(gpio_pin=23)
+				relay_status.schedule_status=False
+				relay_status.gpio_pin=23
+				relay_status.save()
 			else:
 				continue
 		triggers = CronTrigger(second='*/10')
@@ -399,6 +465,12 @@ def schedule_display_inputs(display,gpio_pin):
 	return
 
 def start():
+	# gpiozero.OutputDevice(14, active_high=False, initial_value=False)
+	# gpiozero.OutputDevice(15, active_high=False, initial_value=False)
+	# gpiozero.OutputDevice(18, active_high=False, initial_value=False)
+	# gpiozero.OutputDevice(23, active_high=False, initial_value=False)
+	# gpiozero.OutputDevice(24, active_high=False, initial_value=False)
+	scheduler.add_job(read_sensor_data, replace_existing=True)
 	triggers = CronTrigger(second='*/10')
 	triggers_log = CronTrigger(minute='*/15')
 	job_list = scheduler.get_jobs()
@@ -424,7 +496,7 @@ def start():
 		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
 	try:
 		scheduler.start()
-		print('starting down')
+		print('starting up')
 	except Exception as e:
 		print('shutting down')
 		scheduler.shutdown()

@@ -23,6 +23,7 @@ ENV PYTHONPATH /usr/lib/python3/dist-packages
 # install dependencies
 RUN apt install python3-opencv
 RUN pip install psycopg2
+RUN CFLAGS="-fcommon" pip install rpi.gpio
 COPY ./requirements.txt /arc/requirements.txt
 RUN pip install -r requirements.txt
 RUN apt-get install -y libilmbase-dev\

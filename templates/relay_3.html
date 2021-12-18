@@ -8,7 +8,7 @@
 {% if gpio_3_state == 1 %}
 <form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
 	{% csrf_token %}
-	<input type="hidden" name="3" value="3">
+	<input type="hidden" name="23" value="23">
 	<input type="hidden" name="next" value="{{ request.path }}">
 	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
 		<button type="submit" class="arc_buttons" name="status" value="False">OFF</button>
@@ -23,7 +23,7 @@
 {% else %}
 <form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
 	{% csrf_token %}
-	<input type="hidden" name="3" value="3">
+	<input type="hidden" name="23" value="23">
 	<input type="hidden" name="next" value="{{ request.path }}">
 	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
 		<button type="submit" class="arc_buttons" name="status" value="True">ON</button>

@@ -50,6 +50,7 @@ def set_climate(request):
 			day_values.humidity_value = form.cleaned_data['humidity_value_day']
 			day_values.buffer_value = form.cleaned_data['buffer_value_day']
 			day_values.temp_value = form.cleaned_data['temp_value_day']
+			day_values.co2_value = form.cleaned_data['co2_value_day']
 			day_values.save()
 
 			night_values = ClimateValues.objects.get(pk=2)
@@ -59,7 +60,7 @@ def set_climate(request):
 			night_values.start_time = form.cleaned_data['start_time']
 			night_values.end_time = form.cleaned_data['end_time']
 			night_values.save()
-			print('Humidity and temperature values saved successfully.')
+			print('Humidity, Temperature, CO2 values saved successfully.')
 			# ht_obj = ClimateLogs.objects.all().order_by('-created_at')[:10]
 			context = {'form':form}
 			return redirect('/climate',context)
