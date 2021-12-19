@@ -14,7 +14,7 @@ import time
 
 jobstores = {
 	'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@db:5432/arc_db')
-# 'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@localhost:5432/arc_db')
+	# 'default': SQLAlchemyJobStore(url='postgresql+psycopg2://pi:rnautomations@localhost:5432/arc_db')
 }
 executors = {
 	'default': ThreadPoolExecutor(10),
@@ -199,9 +199,10 @@ def check_climate():
 			ht_day_params = ClimateValues()
 			ht_day_params.pk=1
 			ht_day_params.humidity_value=humidity
-			ht_day_params.buffer_value=1000
+			ht_day_params.buffer_value=10
 			ht_day_params.temp_value=int(fahrenheit)
 			ht_day_params.co2_value=co2
+			ht_day_params.co2_buffer_value=100
 			ht_day_params.save()
 		try:
 			ht_night_params = ClimateValues.objects.get(pk=2)
@@ -209,9 +210,10 @@ def check_climate():
 			ht_night_params = ClimateValues()
 			ht_night_params.pk=2
 			ht_night_params.humidity_value=humidity
-			ht_night_params.buffer_value=1000
+			ht_night_params.buffer_value=10
 			ht_night_params.temp_value=int(fahrenheit)
-			ht_night_params.co2_value=9999
+			ht_night_params.co2_value=2000
+			ht_day_params.co2_buffer_value=100
 			ht_night_params.start_time=datetime.now().time()
 			ht_night_params.end_time=datetime.now().time()
 			ht_night_params.save()
@@ -221,7 +223,7 @@ def check_climate():
 			co2_nagitive = ht_params.co2_value
 		else:
 			ht_params = ClimateValues.objects.get(pk=1)
-			co2_nagitive = ht_params.co2_value-ht_params.buffer_value
+			co2_nagitive = ht_params.co2_value-ht_params.co2_buffer_value
 
 
 		humidity_positive = ht_params.humidity_value+ht_params.buffer_value
@@ -234,7 +236,7 @@ def check_climate():
 				e = Exhaust.objects.get(pk=2)
 				if e.automation_status == 'True':
 					if e.status == 'True':
-						print('Exhuast arlready running so continue')
+						print('Exhaust arlready running so continue')
 					else:
 						e.job_id=button_job_id
 						e.status=True
@@ -253,7 +255,7 @@ def check_climate():
 			try:
 				e = Exhaust.objects.get(pk=2)
 				if e.status == 'True':
-					print('Exhuast arlready running so continue')
+					print('Exhaust arlready running so continue')
 				else:
 					e.job_id=button_job_id
 					e.status=True

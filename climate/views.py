@@ -51,6 +51,7 @@ def set_climate(request):
 			day_values.buffer_value = form.cleaned_data['buffer_value_day']
 			day_values.temp_value = form.cleaned_data['temp_value_day']
 			day_values.co2_value = form.cleaned_data['co2_value_day']
+			day_values.co2_buffer_value = form.cleaned_data['co2_buffer_value']
 			day_values.save()
 
 			night_values = ClimateValues.objects.get(pk=2)

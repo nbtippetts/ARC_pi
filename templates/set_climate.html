@@ -3,9 +3,12 @@
 <form action="{% url 'set_climate' %}" method="POST" class="schedule_form">
 	{% csrf_token %}
 		<div class="item">
+			{{ form.co2_value_day }}
+			{{ form.co2_buffer_value }}
+		</div>
+		<div class="item">
 			{{ form.humidity_value_day }}
 			{{ form.temp_value_day }}
-			{{ form.co2_value_day }}
 			{{ form.buffer_value_day }}
 		</div>
 		<div class="item">

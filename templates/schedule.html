@@ -47,7 +47,7 @@
 					{% endfor %}
 					<button type="submit" class="arc_buttons" value="Submit">Submit</button>
 				</form>
-				<div class="main_card__icon">EXHUAST SCHEDULE</div>
+				<div class="main_card__icon">Exhaust SCHEDULE</div>
 				<form action="{% url 'update_schedule' %}" method="POST" class="exhaust_form">
 					{% csrf_token %}
 					<div class="item">
@@ -88,7 +88,7 @@
 				{% show_gpio_15_schedule_log %}
 			</div>
 			<div class="card">
-				<div class="main_card__icon">EXHUAST LOG</div>
+				<div class="main_card__icon">Exhaust LOG</div>
 				{% show_gpio_3_schedule_log %}
 			</div>
 		</div>

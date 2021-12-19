@@ -42,6 +42,7 @@ class Migration(migrations.Migration):
                 ('buffer_value', models.IntegerField(default=0)),
                 ('temp_value', models.IntegerField(default=0)),
                 ('co2_value', models.IntegerField(default=0)),
+                ('co2_buffer_value', models.IntegerField(default=0)),
                 ('start_time', models.TimeField(blank=True, null=True)),
                 ('end_time', models.TimeField(blank=True, null=True)),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),

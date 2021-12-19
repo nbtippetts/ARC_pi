@@ -11,14 +11,16 @@ class TimeInput(forms.TimeInput):
 	input_type = 'time'
 
 class ClimateValuesForm(forms.Form):
-	humidity_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Humidity'}))
-	temp_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Temperature'}))
-	co2_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time CO2'}))
-	buffer_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Day Time Buffer'}))
+	co2_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'DayTime CO2'}))
+	co2_buffer_value = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'CO2 Buffer'}))
 
-	humidity_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Humidity'}))
-	temp_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Temperature'}))
-	buffer_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'Night Time Buffer'}))
+	humidity_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'DayTime Humidity'}))
+	temp_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'DayTime Temperature'}))
+	buffer_value_day = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'DayTime Buffer'}))
+
+	humidity_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'NightTime Humidity'}))
+	temp_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'NightTime Temperature'}))
+	buffer_value_night = forms.DecimalField(max_digits=6, decimal_places=2,widget=forms.TextInput(attrs={'placeholder': 'NightTime Buffer'}))
 	
 	start_time = forms.TimeField(widget=TimeInput)
 	end_time = forms.TimeField(widget=TimeInput)

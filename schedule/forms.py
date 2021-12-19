@@ -31,7 +31,7 @@ cron_job_hours = (
 select_gpio_pin = (
 	(14, 'Lights'),
 	(15, 'Water'),
-	(23, 'Exhuast')
+	(23, 'Exhaust')
 )
 
 duration_hour = timer_hours()

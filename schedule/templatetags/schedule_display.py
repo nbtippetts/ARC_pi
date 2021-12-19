@@ -226,11 +226,17 @@ def gpio_3_state_function():
 
 @register.inclusion_tag('current_humidity.html')
 def show_humidity():
-	check_climate=ClimateData.objects.first()
-	current_humidity=check_climate.humidity
-	current_temp=check_climate.temp
-	vpd=check_climate.vpd
-	co2=check_climate.co2
+	try:
+		check_climate=ClimateData.objects.first()
+		current_humidity=check_climate.humidity
+		current_temp=check_climate.temp
+		vpd=check_climate.vpd
+		co2=check_climate.co2
+	except Exception as e:
+		current_humidity=0
+		current_temp=0
+		vpd=0
+		co2=0
 	try:
 		check_current_values = ClimateValues.objects.get(pk=2)
 	except Exception as e:
@@ -238,6 +244,7 @@ def show_humidity():
 			pk=2,
 			humidity_value=current_humidity,
 			temp_value=current_temp,
+			co2_value=co2,
 			start_time=datetime.now().time(),
 			end_time=datetime.now().time(),
 		)
@@ -255,6 +262,7 @@ def show_humidity():
 				pk=1,
 				humidity_value=current_humidity,
 				temp_value=current_temp,
+				co2_value=co2,
 				start_time=datetime.now().time(),
 				end_time=datetime.now().time(),
 			)
@@ -262,12 +270,12 @@ def show_humidity():
 			current_values = ClimateValues.objects.get(pk=1)
 			pass
 
-	return {'humidity': current_humidity,'temp': current_temp, 'vpd': vpd, 'co2': co2, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
+	return {'humidity': current_humidity,'temp': current_temp, 'vpd': vpd, 'co2': co2, 'co2_value':current_values.co2_value, 'humidity_value':current_values.humidity_value,'temp_value':current_values.temp_value,}
 
-@register.inclusion_tag('current_temp.html')
-def show_temp():
+@register.inclusion_tag('climate_params.html')
+def show_climate_params():
 	current_temp = show_humidity()
-	return {'temp': current_temp['temp'],'temp_value':current_temp['temp_value'], 'vpd_value':current_temp['vpd'], 'co2_value':current_temp['co2']}
+	return {'humidity_value':current_temp['humidity_value'], 'temp_value':current_temp['temp_value'], 'co2_value':current_temp['co2_value']}
 
 # @register.inclusion_tag('climate_log_form.html')
 # def select_climate_logs():

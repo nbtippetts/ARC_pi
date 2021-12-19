@@ -7,7 +7,7 @@ select_gpio_pin = (
 	(14, 'Lights'),
 	(15, 'Water'),
 	(18, 'Climate'),
-	(23, 'Exhuast')
+	(23, 'Exhaust')
 )
 
 class GetLogsForm(forms.Form):
