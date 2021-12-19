@@ -1,10 +1,7 @@
 import time
 import board
 import adafruit_scd4x
-#add math function for VPD calculation
 import math
-
-from gpiozero import exc
 from .models import ClimateData
 def read_sensor_data():
 	humidity = 0.0

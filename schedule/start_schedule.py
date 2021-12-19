@@ -178,11 +178,18 @@ def relay_24():
 		pass
 
 def check_climate():
-	check_climate=ClimateData.objects.first()
-	humidity=check_climate.humidity
-	fahrenheit=check_climate.temp
-	vpd=check_climate.vpd
-	co2=check_climate.co2
+	try:
+		check_climate=ClimateData.objects.first()
+		humidity=check_climate.humidity
+		fahrenheit=check_climate.temp
+		vpd=check_climate.vpd
+		co2=check_climate.co2
+	except Exception as e:
+		humidity=0
+		fahrenheit=0
+		vpd=0.00
+		co2=0
+		pass
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		# This is were we will check for day time param or night time params
@@ -192,7 +199,7 @@ def check_climate():
 			ht_day_params = ClimateValues()
 			ht_day_params.pk=1
 			ht_day_params.humidity_value=humidity
-			ht_day_params.buffer_value=5
+			ht_day_params.buffer_value=1000
 			ht_day_params.temp_value=int(fahrenheit)
 			ht_day_params.co2_value=co2
 			ht_day_params.save()
@@ -202,7 +209,7 @@ def check_climate():
 			ht_night_params = ClimateValues()
 			ht_night_params.pk=2
 			ht_night_params.humidity_value=humidity
-			ht_night_params.buffer_value=5
+			ht_night_params.buffer_value=1000
 			ht_night_params.temp_value=int(fahrenheit)
 			ht_night_params.co2_value=9999
 			ht_night_params.start_time=datetime.now().time()
@@ -317,11 +324,18 @@ def check_climate():
 		print('Failed to retrieve data from climate sensor.')
 
 def climate_logs():
-	check_climate=ClimateData.objects.first()
-	humidity=check_climate.humidity
-	fahrenheit=check_climate.temp
-	vpd=check_climate.vpd
-	co2=check_climate.co2
+	try:
+		check_climate=ClimateData.objects.first()
+		humidity=check_climate.humidity
+		fahrenheit=check_climate.temp
+		vpd=check_climate.vpd
+		co2=check_climate.co2
+	except Exception as e:
+		humidity=0
+		fahrenheit=0
+		vpd=0.00
+		co2=0
+		pass
 	if humidity is not None and fahrenheit is not None:
 		humidity = int(humidity)
 		ht_log = ClimateLogs()
@@ -424,8 +438,8 @@ def exhaust_automation():
 				relay_status.save()
 			else:
 				continue
-		triggers = CronTrigger(second='*/10')
-		scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+		# triggers = CronTrigger(second='*/10')
+		# scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
 	except Exception as e:
 		pass
 	return
@@ -464,13 +478,13 @@ def schedule_display_inputs(display,gpio_pin):
 		count+=1
 	return
 
+def add_climate_jobs():
+	triggers = CronTrigger(second='*/10')
+	scheduler.add_job(read_sensor_data, misfire_grace_time=None, replace_existing=True)
+	scheduler.add_job(check_climate, triggers, id='climate_job_id',misfire_grace_time=None, replace_existing=True)
+	return
+
 def start():
-	# gpiozero.OutputDevice(14, active_high=False, initial_value=False)
-	# gpiozero.OutputDevice(15, active_high=False, initial_value=False)
-	# gpiozero.OutputDevice(18, active_high=False, initial_value=False)
-	# gpiozero.OutputDevice(23, active_high=False, initial_value=False)
-	# gpiozero.OutputDevice(24, active_high=False, initial_value=False)
-	scheduler.add_job(read_sensor_data, replace_existing=True)
 	triggers = CronTrigger(second='*/10')
 	triggers_log = CronTrigger(minute='*/15')
 	job_list = scheduler.get_jobs()
@@ -491,13 +505,16 @@ def start():
 				if job.id=='climate_job_id':
 					job.pause()
 					job.remove()
-					scheduler.add_job(check_climate, triggers, id='climate_job_id', replace_existing=True)
+					scheduler.add_job(check_climate, triggers, id='climate_job_id',misfire_grace_time=None, replace_existing=True)
 					pass
+	
 		scheduler.add_job(climate_logs, triggers_log, id='climate_logs_job_id', misfire_grace_time=None, replace_existing=True)
+
 	try:
-		scheduler.start()
 		print('starting up')
+		scheduler.start()
 	except Exception as e:
+		print(e)
 		print('shutting down')
 		scheduler.shutdown()
 		time.sleep(3)
