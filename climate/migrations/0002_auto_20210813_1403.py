@@ -25,9 +25,9 @@ class Migration(migrations.Migration):
         climate_data = ClimateData(pk=1,humidity=0, temp=0, vpd=0, co2=0)
         climate_data.save()
         ClimateValues = apps.get_model('climate', 'climatevalues')
-        climate_value = ClimateValues(pk=1,humidity_value=1, buffer_value=10, temp_value=1, co2_value=1, co2_buffer_value=100, start_time=datetime.now(), end_time=datetime.now())
+        climate_value = ClimateValues(pk=1,humidity_value=1, buffer_value=1000, temp_value=1, co2_value=1, co2_buffer_value=1000, start_time=datetime.now(), end_time=datetime.now())
         climate_value.save()
-        climate_value = ClimateValues(pk=2,humidity_value=1, buffer_value=10, temp_value=1, co2_value=1, co2_buffer_value=100, start_time=datetime.now(), end_time=datetime.now())
+        climate_value = ClimateValues(pk=2,humidity_value=1, buffer_value=1000, temp_value=1, co2_value=1, co2_buffer_value=1000, start_time=datetime.now(), end_time=datetime.now())
         climate_value.save()
 
     operations = [
