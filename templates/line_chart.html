@@ -1,6 +1,8 @@
 {% load static %}
 
 <canvas id="myLineChart" width="600" height="300"></canvas>
+<canvas id="myLineChart1" width="600" height="300"></canvas>
+<canvas id="myLineChart2" width="600" height="300"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
@@ -14,25 +16,21 @@
 	var humid_colors = [chartColors.blue,chartColors.blue,chartColors.blue,chartColors.blue,chartColors.blue]
 	var temp_colors = [chartColors.red,chartColors.red,chartColors.red,chartColors.red,chartColors.red]
 	var ctx_bar = document.getElementById('myLineChart').getContext('2d');
+	var ctx_bar1 = document.getElementById('myLineChart1').getContext('2d');
+	var ctx_bar2 = document.getElementById('myLineChart2').getContext('2d');
 	var bar_chart = new Chart(ctx_bar, {
 		type: 'line',
 		data: {
 			labels: [{% for d in data %} "{{ d.created_at }}", {% endfor %}],
 			datasets: [{
 				label: 'Humidity',
-				data: [{% for hum in data %} "{{ hum.humidity }}", {% endfor %}],
+				data: [{% for h in data %} "{{ h.humidity }}", {% endfor %}],
 				pointBackgroundColor: 'rgb(255, 99, 132)',
 				fill: false,
 				backgroundColor: 'grey'
 			}, {
 				label: "Temperature",
 				data: [{% for t in data %} "{{ t.temp }}", {% endfor %}],
-				pointBackgroundColor: 'rgb(54, 162, 235)',
-				fill: false,
-				backgroundColor: 'grey'
-			},{
-				label: "VPD",
-				data: [{% for t in data %} "{{ t.vpd }}", {% endfor %}],
 				pointBackgroundColor: 'rgb(54, 162, 235)',
 				fill: false,
 				backgroundColor: 'grey'
@@ -45,6 +43,66 @@
 						max: 120,
 						min: 0,
 						stepSize: 10
+					}
+				}],
+				xAxes: [{
+                	ticks: {
+						reverse: true,
+                    	display: false //this will remove only the label
+                	}
+            	}]
+			}
+		}
+	});
+	var bar_chart = new Chart(ctx_bar1, {
+		type: 'line',
+		data: {
+			labels: [{% for d in data %} "{{ d.created_at }}", {% endfor %}],
+			datasets: [{
+				label: 'CO2',
+				data: [{% for c in data %} "{{ c.co2 }}", {% endfor %}],
+				pointBackgroundColor: 'rgb(255, 99, 132)',
+				fill: false,
+				backgroundColor: 'grey'
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						max: 1500,
+						min: 0,
+						stepSize: 100
+					}
+				}],
+				xAxes: [{
+                	ticks: {
+						reverse: true,
+                    	display: false //this will remove only the label
+                	}
+            	}]
+			}
+		}
+	});
+	var bar_chart = new Chart(ctx_bar2, {
+		type: 'line',
+		data: {
+			labels: [{% for d in data %} "{{ d.created_at }}", {% endfor %}],
+			datasets: [{
+				label: "VPD",
+				data: [{% for t in data %} "{{ t.vpd }}", {% endfor %}],
+				pointBackgroundColor: 'rgb(54, 162, 235)',
+				fill: false,
+				backgroundColor: 'grey'
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						max: 5,
+						min: 0,
+						stepSize: 0.5
 					}
 				}],
 				xAxes: [{

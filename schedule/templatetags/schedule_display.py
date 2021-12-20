@@ -308,6 +308,7 @@ def log_data():
 @register.inclusion_tag('set_climate.html')
 def set_climate_form():
 	return climate_tag()
+
 @register.inclusion_tag('line_chart.html')
 def climate_tag():
 	# current_humidity, current_temp = get_humidity_temperature()
@@ -324,19 +325,12 @@ def climate_tag():
 	# except SelectLogs.DoesNotExist:
 	# 	log_data = ClimateLogs.objects.all().order_by('-created_at')[:50]
 	# 	pass
-	try:
-		current_values = ClimateValues.objects.get(pk=1)
-	except Exception as e:
-		h = ClimateValues(
-			humidity_value=0.0,
-			temp_value=0.0
-		)
-		h.save()
-		pass
+	
 	current_values = ClimateValues.objects.get(pk=1)
 	return {
 		'data': log_data,
 		'form':form,
+		'co2_value':current_values.co2_value,
 		'humidity_value':current_values.humidity_value,
 		'temp_value':current_values.temp_value,}
 
