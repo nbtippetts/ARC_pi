@@ -481,10 +481,15 @@ def schedule_display_inputs(display,gpio_pin):
 	return
 
 def add_climate_jobs():
-	triggers = CronTrigger(second='*/10')
-	scheduler.add_job(read_sensor_data, misfire_grace_time=None, replace_existing=True)
-	scheduler.add_job(check_climate, triggers, id='climate_job_id',misfire_grace_time=None, replace_existing=True)
-	return
+	job_list = scheduler.get_jobs()
+	for job in job_list:
+		if job.id=='read_sensor_data_id':
+			print('sensor job already exists so do nothing')
+			return
+		else:
+			print('add sensor job to ap')
+			scheduler.add_job(read_sensor_data, id='read_sensor_data_id', misfire_grace_time=None, replace_existing=True)
+			return
 
 def start():
 	triggers = CronTrigger(second='*/10')

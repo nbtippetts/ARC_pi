@@ -29,13 +29,14 @@ def download_climate_csv(request, *args, **kwargs):
 	response = HttpResponse(content_type='text/csv')
 	cd = f'attachment; filename=climate_logs.csv'
 	response['Content-Disposition'] = cd
-	fieldnames = ('humidity','temp','vpd','created_at')
+	fieldnames = ('humidity','temp','co2', 'vpd','created_at')
 	data=ClimateLogs.objects.values(*fieldnames)
 	writer = csv.DictWriter(response, fieldnames=fieldnames)
 	writer.writeheader()
 	for row in data:
 		writer.writerow(row)
 	return response
+
 @login_required
 def select_logs(request):
 	if request.method == 'POST':

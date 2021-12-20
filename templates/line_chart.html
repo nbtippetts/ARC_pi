@@ -61,9 +61,9 @@
 			datasets: [{
 				label: 'CO2',
 				data: [{% for c in data %} "{{ c.co2 }}", {% endfor %}],
-				pointBackgroundColor: 'rgb(255, 99, 132)',
+				pointBackgroundColor: 'rgb(3, 76, 82)',
 				fill: false,
-				backgroundColor: 'grey'
+				backgroundColor: 'rgb(2, 60, 65)'
 			}]
 		},
 		options: {
@@ -91,18 +91,18 @@
 			datasets: [{
 				label: "VPD",
 				data: [{% for t in data %} "{{ t.vpd }}", {% endfor %}],
-				pointBackgroundColor: 'rgb(54, 162, 235)',
+				pointBackgroundColor: 'rgb(102, 122, 57)',
 				fill: false,
-				backgroundColor: 'grey'
+				backgroundColor: 'rgb(71, 85, 39)'
 			}]
 		},
 		options: {
 			scales: {
 				yAxes: [{
 					ticks: {
-						max: 5,
+						max: 3,
 						min: 0,
-						stepSize: 0.5
+						stepSize: 0.25
 					}
 				}],
 				xAxes: [{

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
-from schedule.start_schedule import add_climate_jobs
 
 def register(request):
     if request.method == 'POST':
@@ -12,7 +11,6 @@ def register(request):
             return redirect('/login')
     else:
         form = UserRegisterForm()
-    add_climate_jobs()
     return render(request, 'register.html', {'form': form})
 
 @login_required

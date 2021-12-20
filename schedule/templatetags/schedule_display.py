@@ -283,7 +283,7 @@ def show_climate_params():
 # 	return {'daterange_form': form}
 @register.inclusion_tag('log_data.html')
 def log_data():
-	log_data = ClimateLogs.objects.all().order_by('-id')[:10]
+	log_data = ClimateLogs.objects.all().order_by('-id')[:14]
 	# try:
 	# 	get_dates = SelectLogs.objects.get(gpio_pin=4)
 	# 	print(get_dates.start_date)

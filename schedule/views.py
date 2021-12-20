@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def schedule(request):
+	start_schedule.add_climate_jobs()
 	start = datetime.now()
 	dtwithoutseconds = start.replace(second=0, microsecond=0)
 	form = ScheduleForm(initial={
