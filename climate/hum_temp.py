@@ -2,7 +2,7 @@ import time
 import board
 import adafruit_scd4x
 import math
-from .models import ClimateData
+from .models import ClimateData, ClimateValues
 def read_sensor_data():
 	humidity = 0.0
 	co2 = 0.0
@@ -26,25 +26,27 @@ def read_sensor_data():
 				temperature = scd4x.temperature
 				fahrenheit = (temperature * 9/5) + 32
 				print(int(humidity), int(fahrenheit), round(vpd,2), co2)
-				# if save_data >= 0:
-				try:
-					climate_data=ClimateData.objects.first()
-					climate_data.humidity=humidity
-					climate_data.temp=fahrenheit
-					climate_data.vpd=vpd
-					climate_data.co2=co2
-					climate_data.save()
-					print('data has been inserted successfully.')
-				except Exception as e:
-					climate_data=ClimateData()
-					climate_data.humidity=humidity
-					climate_data.temp=fahrenheit
-					climate_data.vpd=vpd
-					climate_data.co2=co2
-					climate_data.save()
-					print('data has been inserted successfully.')
-					# save_data=0
-				# save_data+=1
+				if humidity==50 and fahrenheit==108 and co2==32768:
+					continue
+				else:
+					try:
+						climate_data=ClimateData.objects.first()
+						climate_data.humidity=humidity
+						climate_data.temp=fahrenheit
+						climate_data.vpd=vpd
+						climate_data.co2=co2
+						climate_data.save()
+						print('data has been inserted successfully.')
+					except Exception as e:
+						climate_data=ClimateData()
+						climate_data.humidity=humidity
+						climate_data.temp=fahrenheit
+						climate_data.vpd=vpd
+						climate_data.co2=co2
+						climate_data.save()
+						print('data has been inserted successfully.')
+						pass
+
 			time.sleep(5)
 			# print('loop')
 		except Exception as e:

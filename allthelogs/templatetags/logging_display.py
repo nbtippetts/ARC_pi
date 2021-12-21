@@ -86,7 +86,7 @@ def select_logs():
 @register.inclusion_tag('log_data.html')
 def log_data():
 	try:
-		get_dates = SelectLogs.objects.get(gpio_pin=4)
+		get_dates = SelectLogs.objects.get(gpio_pin=18)
 		print(get_dates.start_date)
 		print(get_dates.end_date)
 		log_data = ClimateLogs.objects.filter(
