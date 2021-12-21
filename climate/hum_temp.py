@@ -26,7 +26,7 @@ def read_sensor_data():
 				temperature = scd4x.temperature
 				fahrenheit = (temperature * 9/5) + 32
 				print(int(humidity), int(fahrenheit), round(vpd,2), co2)
-				if humidity==50 and fahrenheit==108 and co2==32768:
+				if co2>=30000:
 					continue
 				else:
 					try:
